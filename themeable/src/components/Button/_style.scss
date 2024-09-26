@@ -1,0 +1,54 @@
+@import "../common/themes";
+
+
+$themes: (
+    light: (
+        primary: #333,
+        secondary: #666,
+        background: #fff,
+        text: #000
+    ),
+
+    dark: (
+        primary: #fff,
+        secondary: #ccc,
+        background: #000,
+        text: #fff
+    )
+);
+
+.button {
+    padding: 10px 20px;
+    border: 1px solid themed('primary');
+    background: themed('primary');
+    color: themed('text');
+    cursor: pointer;
+    transition: all 0.3s;
+
+    // fonts
+    font-size: 16px;
+    font-weight: bold;
+
+
+    &:hover {
+        background: darken(themed('primary'), 10%);
+    }
+
+    // Themes
+    @include themify($themes) {
+        padding: 10px 20px;
+        border: 1px solid themed('primary');
+        background: themed('primary');
+        color: themed('text');
+        cursor: pointer;
+        transition: all 0.3s;
+
+        // fonts
+        font-size: 16px;
+        font-weight: bold;
+
+        &:hover {
+            background: darken(themed('primary'), 10%);
+        }
+    }
+}
