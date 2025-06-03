@@ -1,0 +1,50 @@
+@use "../common/themes" as t;
+
+$themes: (
+    light: (
+        primary: #cccccc,
+        secondary: #0ba5ff,
+        background: #fff,
+        text: #424242
+    ),
+
+    dark: (
+        primary: #fff,
+        secondary: #ccc,
+        background: #000,
+        text: #fff
+    )
+);
+
+.button {
+    padding: 10px 20px;
+    // border: 1px solid themed("primary");
+    background: themed("primary");
+    color: themed("text");
+    cursor: pointer;
+    transition: all 0.3s;
+
+    // fonts
+    font-size: 16px;
+    // font-weight: bold;
+
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px #f1f1f1 inset;
+    // &:hover {
+    //     background: darken(themed("primary"), 10%);
+    // }
+
+    //Themes
+    @include t.themify($themes) {
+        border: 1px solid #{t.themed("primary")};
+        background: #{t.themed("background")};
+        color: #{t.themed("text")};
+
+        &:hover {
+            border: 0.5px solid #6fb9ff;
+            background: t.themed("secondary");
+            color: t.themed("background");
+            box-shadow: none;
+        }
+    }
+}
