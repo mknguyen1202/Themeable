@@ -10,9 +10,27 @@ import { SketchPicker } from 'react-color'
 import { s } from 'framer-motion/dist/types.d-CtuPurYT';
 import { JsxElement } from 'typescript';
 
+import { Slider } from './components/Slider/Slider';
+import { Thumb } from './components/Slider/types';
+import { MultiThumbSlider } from './components/Slider/MultiThumbSlider';
 function App() {
+
+    const [thumbs, setThumbs] = useState<Thumb[]>([
+        { id: 1, value: 30 },
+        { id: 2, value: 70 },
+    ]);
+
+
     return (
         <div className="App">
+            <MultiThumbSlider
+                thumbs={thumbs}
+                onThumbsChange={setThumbs}
+                min={0}
+                max={100}
+                step={1}
+            />
+            {/* <div>Thumb values: {thumbs.map(t => t.value).join(', ')}</div> */}
             {/* <PolarProvider>
 
                 <Control />
@@ -537,6 +555,17 @@ const GradientFillConfigurator: React.FC = () => {
     );
 };
 // -------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
 
 
 // BorderConfigurator Component ----------------------------------------------------------------------------
