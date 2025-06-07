@@ -13,6 +13,8 @@ import { JsxElement } from 'typescript';
 import { Slider } from './components/Slider/Slider';
 import { Thumb } from './components/Slider/types';
 import { MultiThumbSlider } from './components/Slider/MultiThumbSlider';
+
+import { ColorPicker } from './components/editors/ColorPicker/ColorPicker';
 function App() {
 
     const [thumbs, setThumbs] = useState<Thumb[]>([
@@ -23,13 +25,14 @@ function App() {
 
     return (
         <div className="App">
-            <MultiThumbSlider
+            <ColorPicker />
+            {/* <MultiThumbSlider
                 thumbs={thumbs}
                 onThumbsChange={setThumbs}
                 min={0}
                 max={100}
                 step={1}
-            />
+            /> */}
             {/* <div>Thumb values: {thumbs.map(t => t.value).join(', ')}</div> */}
             {/* <PolarProvider>
 
@@ -52,59 +55,59 @@ function App() {
                 This is a Chip component
             </Chip> */}
             {/* </div> */}
-            <Configurator />
+            {/* <Configurator /> */}
 
         </div>
     );
 }
 
 
-const ColorPicker: React.FC = () => {
+// const ColorPicker: React.FC = () => {
 
-    const [color, setColor] = useState('red');
-    const [hovered, setHovered] = useState(false);
+//     const [color, setColor] = useState('red');
+//     const [hovered, setHovered] = useState(false);
 
-    const handleChangeComplete = (color: any) => {
-        setColor(color.hex);
-    };
+//     const handleChangeComplete = (color: any) => {
+//         setColor(color.hex);
+//     };
 
-    const handleHover = () => {
-        setHovered(!hovered);
-    }
+//     const handleHover = () => {
+//         setHovered(!hovered);
+//     }
 
-    return (
-        <div style={{ padding: '1rem' }}>
-            {hovered && (
-                <SketchPicker
-                    color={color}
-                    onChangeComplete={handleChangeComplete}
-                />)}
-            <span
-                style={{
-                    display: 'inline-block',
-                    borderRadius: '15%',
-                    marginLeft: '1rem',
-                    backgroundColor: color,
+//     return (
+//         <div style={{ padding: '1rem' }}>
+//             {hovered && (
+//                 <SketchPicker
+//                     color={color}
+//                     onChangeComplete={handleChangeComplete}
+//                 />)}
+//             <span
+//                 style={{
+//                     display: 'inline-block',
+//                     borderRadius: '15%',
+//                     marginLeft: '1rem',
+//                     backgroundColor: color,
 
-                    width: '4rem',
-                    height: '4rem',
+//                     width: '4rem',
+//                     height: '4rem',
 
 
-                }}
-                onClick={handleHover}
-            >
-                {/* Selected Color: {color} */}
-            </span>
-            <div
-                style={{
-                    color: `${color}`,
-                }}
-            >
-                {color}
-            </div>
-        </div>
-    );
-}
+//                 }}
+//                 onClick={handleHover}
+//             >
+//                 {/* Selected Color: {color} */}
+//             </span>
+//             <div
+//                 style={{
+//                     color: `${color}`,
+//                 }}
+//             >
+//                 {color}
+//             </div>
+//         </div>
+//     );
+// }
 
 
 type FillColorData = {
