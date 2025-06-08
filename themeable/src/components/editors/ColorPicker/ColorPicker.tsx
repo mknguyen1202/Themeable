@@ -2,6 +2,8 @@ import React, { useRef, useState, useEffect } from "react";
 import { hslToRgb, rgbToHex, hexToRgb } from "./ColorUtils";
 
 const canvasSize = 200;
+const HUE_HEIGHT = 32; // or 30–36, based on thumb height
+
 
 export const ColorPicker: React.FC = () => {
     const [hue, setHue] = useState(0);
@@ -15,6 +17,10 @@ export const ColorPicker: React.FC = () => {
     const opacityRef = useRef<HTMLCanvasElement>(null);
 
     const [pickerPos, setPickerPos] = useState<{ x: number; y: number }>({ x: canvasSize - 1, y: 0 });
+    const [isDragging, setIsDragging] = useState(false);
+
+    const [isHueDragging, setIsHueDragging] = useState(false);
+    const [isOpacityDragging, setIsOpacityDragging] = useState(false);
 
 
     // RGB Values
@@ -26,40 +32,163 @@ export const ColorPicker: React.FC = () => {
         const ctx = hueRef.current?.getContext("2d");
         if (!ctx) return;
 
-        const gradient = ctx.createLinearGradient(0, 0, canvasSize, 0);
+        const width = canvasSize;
+        const height = HUE_HEIGHT; // Use updated height
+        const thumbWidth = 8;
+        const thumbHeight = 24;
+        const radius = thumbWidth / 2;
+        const thumbX = (hue / 360) * width;
+        const centerX = Math.min(Math.max(thumbX, radius), width - radius);
+        const centerY = height / 2;
+
+        // 1. Draw hue gradient bar in the center area (shorter than canvas)
+        const stripY = (height - 16) / 2; // centered gradient strip
+        ctx.clearRect(0, 0, width, height);
+        const gradient = ctx.createLinearGradient(0, 0, width, 0);
         for (let i = 0; i <= 360; i += 10) {
             gradient.addColorStop(i / 360, `hsl(${i}, 100%, 50%)`);
         }
-
         ctx.fillStyle = gradient;
-        ctx.fillRect(0, 0, canvasSize, 20);
+        ctx.fillRect(0, stripY, width, 16);
+
+        // 2. Draw pill-shaped thumb
+        ctx.beginPath();
+        ctx.moveTo(centerX - radius, centerY - thumbHeight / 2 + radius);
+        ctx.arcTo(centerX - radius, centerY + thumbHeight / 2, centerX, centerY + thumbHeight / 2, radius);
+        ctx.arcTo(centerX + radius, centerY + thumbHeight / 2, centerX + radius, centerY, radius);
+        ctx.arcTo(centerX + radius, centerY - thumbHeight / 2, centerX, centerY - thumbHeight / 2, radius);
+        ctx.arcTo(centerX - radius, centerY - thumbHeight / 2, centerX - radius, centerY, radius);
+        ctx.closePath();
+
+        // Fill thumb with current hue color
+        ctx.fillStyle = `hsl(${hue}, 100%, 50%)`;
+        ctx.fill();
+
+        // First: white outer border (drawn with a wider stroke)
+        ctx.lineWidth = 4;
+        ctx.strokeStyle = "#fff";
+        ctx.stroke();
+
+        // Second: black inner border (drawn on top, narrower)
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "#000";
+        ctx.stroke();
+
+
+
     };
+
+    const handleHueInteraction = (clientX: number) => {
+        const rect = hueRef.current!.getBoundingClientRect();
+        const x = Math.max(0, Math.min(clientX - rect.left, canvasSize));
+        const newHue = (x / canvasSize) * 360;
+        setHue(newHue);
+    };
+    const handleHueMouseDown = (e: React.MouseEvent) => {
+        setIsHueDragging(true);
+        handleHueInteraction(e.clientX);
+    };
+
+    const handleHueMouseMove = (e: React.MouseEvent) => {
+        if (!isHueDragging) return;
+        handleHueInteraction(e.clientX);
+    };
+
+    const handleHueMouseUp = () => setIsHueDragging(false);
+
+
+
+
+
+
+
 
     const drawOpacityStrip = () => {
         const ctx = opacityRef.current?.getContext("2d");
         if (!ctx) return;
 
         const width = canvasSize;
-        const height = 20;
+        const height = 32;
+        const stripHeight = 16;
+        const stripY = (height - stripHeight) / 2;
         const squareSize = 5;
 
-        // Draw checkerboard background
-        for (let y = 0; y < height; y += squareSize) {
+        ctx.clearRect(0, 0, width, height);
+
+        // 1. Draw checkerboard pattern ONLY within the gradient strip area
+        for (let y = stripY; y < stripY / 2 + stripHeight; y += squareSize) {
             for (let x = 0; x < width; x += squareSize) {
-                ctx.fillStyle = (x / squareSize + y / squareSize) % 2 === 0 ? "#ccc" : "#fff";
+                ctx.fillStyle = (Math.floor(x / squareSize) + Math.floor(y / squareSize)) % 2 === 0 ? "#ccc" : "#fff";
                 ctx.fillRect(x, y, squareSize, squareSize);
             }
         }
 
-        // Draw transparency gradient on top
-        const rgba = `rgba(${r}, ${g}, ${b}, `;
+        // 2. Draw the opacity gradient strip (on top of checkerboard)
         const gradient = ctx.createLinearGradient(0, 0, width, 0);
-        gradient.addColorStop(0, `${rgba}0)`);
-        gradient.addColorStop(1, `${rgba}1)`);
+        gradient.addColorStop(0, `rgba(${r}, ${g}, ${b}, 0)`);
+        gradient.addColorStop(1, `rgba(${r}, ${g}, ${b}, 1)`);
 
         ctx.fillStyle = gradient;
-        ctx.fillRect(0, 0, width, height);
+        ctx.fillRect(0, stripY, width, stripHeight);
+
+        // 3. Draw the capsule-style thumb (same as before)
+        const thumbWidth = 8;
+        const thumbHeight = 24;
+        const radius = thumbWidth / 2;
+        const centerY = height / 2;
+        const thumbX = alpha * width;
+        const centerX = Math.min(Math.max(thumbX, radius), width - radius);
+
+        ctx.beginPath();
+        ctx.moveTo(centerX - radius, centerY - thumbHeight / 2 + radius);
+        ctx.arcTo(centerX - radius, centerY + thumbHeight / 2, centerX, centerY + thumbHeight / 2, radius);
+        ctx.arcTo(centerX + radius, centerY + thumbHeight / 2, centerX + radius, centerY, radius);
+        ctx.arcTo(centerX + radius, centerY - thumbHeight / 2, centerX, centerY - thumbHeight / 2, radius);
+        ctx.arcTo(centerX - radius, centerY - thumbHeight / 2, centerX - radius, centerY, radius);
+        ctx.closePath();
+
+        ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`;
+        ctx.fill();
+
+        // White outer border
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = "#fff";
+        ctx.stroke();
+
+        // Black inner border
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = "#000";
+        ctx.stroke();
     };
+
+    const handleOpacityInteraction = (clientX: number) => {
+        const rect = opacityRef.current!.getBoundingClientRect();
+        const x = Math.max(0, Math.min(clientX - rect.left, canvasSize));
+        setAlpha(x / canvasSize);
+    };
+
+    const handleOpacityMouseDown = (e: React.MouseEvent) => {
+        setIsOpacityDragging(true);
+        handleOpacityInteraction(e.clientX);
+    };
+
+    const handleOpacityMouseMove = (e: React.MouseEvent) => {
+        if (!isOpacityDragging) return;
+        handleOpacityInteraction(e.clientX);
+    };
+
+    const handleOpacityMouseUp = () => {
+        setIsOpacityDragging(false);
+    };
+
+
+
+
+
+
+
+
+
 
 
     const drawPicker = () => {
@@ -82,23 +211,75 @@ export const ColorPicker: React.FC = () => {
         ctx.fillRect(0, 0, width, height);
 
         ctx.beginPath();
-        ctx.arc(pickerPos.x, pickerPos.y, 5, 0, 2 * Math.PI);
+        ctx.arc(pickerPos.x, pickerPos.y, 10, 0, 2 * Math.PI);
         ctx.strokeStyle = "#000";
         ctx.lineWidth = 2;
         ctx.stroke();
 
         ctx.beginPath();
-        ctx.arc(pickerPos.x, pickerPos.y, 3, 0, 2 * Math.PI);
+        ctx.arc(pickerPos.x, pickerPos.y, 8, 0, 2 * Math.PI);
         ctx.strokeStyle = "#fff";
         ctx.stroke();
 
     };
 
+    const handlePickerInteraction = (clientX: number, clientY: number) => {
+        const rect = pickerRef.current!.getBoundingClientRect();
+        const x = Math.max(0, Math.min(clientX - rect.left, canvasSize));
+        const y = Math.max(0, Math.min(clientY - rect.top, canvasSize));
+
+        const sat = (x / canvasSize) * 100;
+        const light = 100 - (y / canvasSize) * 100;
+
+        setSaturation(sat);
+        setLightness(light);
+        setPickerPos({ x, y });
+    };
+
+    const handleMouseDown = (e: React.MouseEvent) => {
+        setIsDragging(true);
+        handlePickerInteraction(e.clientX, e.clientY);
+    };
+
+    const handleMouseMove = (e: React.MouseEvent) => {
+        if (!isDragging) return;
+        handlePickerInteraction(e.clientX, e.clientY);
+    };
+
+    const handleMouseUp = () => setIsDragging(false);
+
+
+
+
+
+
+
+
     useEffect(() => {
         drawHueStrip();
         drawOpacityStrip();
         drawPicker();
-    }, [hue, r, g, b]);
+    }, [hue, r, g, b, alpha]);
+
+    useEffect(() => {
+        const stopDragging = () => setIsDragging(false);
+        window.addEventListener("mouseup", stopDragging);
+        return () => window.removeEventListener("mouseup", stopDragging);
+    }, []);
+
+    useEffect(() => {
+        const stopDragging = () => setIsHueDragging(false);
+        window.addEventListener("mouseup", stopDragging);
+        return () => window.removeEventListener("mouseup", stopDragging);
+    }, []);
+
+    useEffect(() => {
+        const stopDragging = () => setIsOpacityDragging(false);
+        window.addEventListener("mouseup", stopDragging);
+        return () => window.removeEventListener("mouseup", stopDragging);
+    }, []);
+
+
 
     const handleHueClick = (e: React.MouseEvent) => {
         const rect = hueRef.current!.getBoundingClientRect();
@@ -134,23 +315,39 @@ export const ColorPicker: React.FC = () => {
                 ref={pickerRef}
                 width={canvasSize}
                 height={canvasSize}
-                onClick={handlePickerClick}
+                onMouseDown={handleMouseDown}
+                onMouseMove={handleMouseMove}
+                onMouseUp={handleMouseUp}
+                onMouseLeave={handleMouseUp}
                 style={{ cursor: "crosshair", border: "1px solid #ccc" }}
             />
+
             <canvas
                 ref={hueRef}
                 width={canvasSize}
-                height={20}
-                onClick={handleHueClick}
-                style={{ marginTop: 10, cursor: "pointer", border: "1px solid #ccc" }}
+                height={HUE_HEIGHT}
+                onMouseDown={handleHueMouseDown}
+                onMouseMove={handleHueMouseMove}
+                onMouseUp={handleHueMouseUp}
+                onMouseLeave={handleHueMouseUp}
+                style={{ marginTop: 10, cursor: "pointer" }}
             />
+
             <canvas
                 ref={opacityRef}
                 width={canvasSize}
-                height={20}
-                onClick={handleOpacityClick}
-                style={{ marginTop: 10, cursor: "pointer", border: "1px solid #ccc" }}
+                height={32}
+                onMouseDown={handleOpacityMouseDown}
+                onMouseMove={handleOpacityMouseMove}
+                onMouseUp={handleOpacityMouseUp}
+                onMouseLeave={handleOpacityMouseUp}
+                style={{
+                    marginTop: 10,
+                    cursor: "pointer"
+                }}
             />
+
+
 
             <div style={{ marginTop: 10 }}>
                 <label>Hex:</label>
