@@ -15,6 +15,16 @@ import { Thumb } from './components/Slider/types';
 import { MultiThumbSlider } from './components/Slider/MultiThumbSlider';
 
 import { ColorPicker } from './components/editors/ColorPicker/ColorPicker';
+
+import { ShadowData } from './components/editors/ShadowConfigurator/types';
+import { Shadow, ShadowConfigurator } from './components/editors/ShadowConfigurator/ShadowConfigurator';
+import { Draggable } from './components/editors/Draggable/Draggable';
+import { ColorInput } from './components/editors/ColorPicker/ColorInput';
+
+
+
+
+
 function App() {
 
     const [thumbs, setThumbs] = useState<Thumb[]>([
@@ -23,9 +33,23 @@ function App() {
     ]);
 
 
+    const [shadows, setShadows] = useState<ShadowData[]>([
+        {
+            offsetX: '0',
+            offsetY: '0',
+            blurRadius: '5',
+            spreadRadius: '0',
+            color: 'rgba(0, 0, 0, 0.5)',
+            inset: false,
+            enabled: true,
+        },]);
+
     return (
         <div className="App">
             <ColorPicker />
+            <ColorInput />
+            {/* <ShadowConfigurator shadows={shadows} onChange={setShadows} /> */}
+            {/* <Draggable /> */}
             {/* <MultiThumbSlider
                 thumbs={thumbs}
                 onThumbsChange={setThumbs}
@@ -62,52 +86,7 @@ function App() {
 }
 
 
-// const ColorPicker: React.FC = () => {
 
-//     const [color, setColor] = useState('red');
-//     const [hovered, setHovered] = useState(false);
-
-//     const handleChangeComplete = (color: any) => {
-//         setColor(color.hex);
-//     };
-
-//     const handleHover = () => {
-//         setHovered(!hovered);
-//     }
-
-//     return (
-//         <div style={{ padding: '1rem' }}>
-//             {hovered && (
-//                 <SketchPicker
-//                     color={color}
-//                     onChangeComplete={handleChangeComplete}
-//                 />)}
-//             <span
-//                 style={{
-//                     display: 'inline-block',
-//                     borderRadius: '15%',
-//                     marginLeft: '1rem',
-//                     backgroundColor: color,
-
-//                     width: '4rem',
-//                     height: '4rem',
-
-
-//                 }}
-//                 onClick={handleHover}
-//             >
-//                 {/* Selected Color: {color} */}
-//             </span>
-//             <div
-//                 style={{
-//                     color: `${color}`,
-//                 }}
-//             >
-//                 {color}
-//             </div>
-//         </div>
-//     );
-// }
 
 
 type FillColorData = {
@@ -205,133 +184,6 @@ const Configurator = () => {
 
 
 
-
-
-// Shadow Component -------------------------------------------------------------------------------------------------
-type ShadowData = {
-    offsetX: string;
-    offsetY: string;
-    blurRadius: string;
-    spreadRadius: string;
-    color?: string;
-    inset: boolean;
-    enabled?: boolean;
-};
-
-type ShadowProps = {
-    shadowData: ShadowData;
-    onChange: (updated: ShadowData) => void;
-    onRemove: () => void;
-    onReset: () => void;
-};
-
-const Shadow = ({ shadowData, onChange, onRemove, onReset }: ShadowProps) => {
-    const editableFields = ['offsetX', 'offsetY', 'blurRadius', 'spreadRadius'] as const;
-    type EditableField = typeof editableFields[number];
-
-    const handleChange = (key: EditableField) => (e: React.ChangeEvent<HTMLInputElement>) => {
-        onChange({ ...shadowData, [key]: e.target.value });
-    };
-
-    return (
-        <div style={{ marginBottom: '1rem', padding: '0.75rem', border: '1px solid #ccc', borderRadius: 4 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '0.5rem' }}>
-                <label>
-                    <input
-                        type='checkbox'
-                        checked={shadowData.enabled ?? true}
-                        onChange={(e) => onChange({ ...shadowData, enabled: e.target.checked })}
-                    /> Enable Shadow
-                </label>
-            </div>
-
-            <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '1rem' }}>
-                {editableFields.map((key) => (
-                    <div key={key}>
-                        <label>{key}</label>
-                        <input
-                            type="number"
-                            value={shadowData[key]}
-                            onChange={handleChange(key)}
-                            style={{ width: '4rem' }}
-                        />
-                    </div>
-                ))}
-
-                <label>Inset</label>
-                <input
-                    type='checkbox'
-                    checked={shadowData.inset}
-                    onChange={(e) => onChange({ ...shadowData, inset: e.target.checked })}
-                    title='Inset Shadow'
-                />
-
-                <input
-                    type='color'
-                    value={shadowData.color || '#000000'}
-                    onChange={(e) => onChange({ ...shadowData, color: e.target.value })}
-                />
-
-                <span style={{ color: shadowData.color }}>{shadowData.color}</span>
-
-                <Button onClick={onReset}>Reset</Button>
-                <Button intent="danger" onClick={onRemove}>Remove</Button>
-            </div>
-        </div>
-    );
-};
-
-type ShadowConfiguratorProps = {
-    shadows: ShadowData[];
-    onChange: (updated: ShadowData[]) => void;
-};
-
-const ShadowConfigurator: React.FC<ShadowConfiguratorProps> = ({ shadows, onChange }) => {
-    const defaultShadow = (): ShadowData => ({
-        offsetX: '0',
-        offsetY: '0',
-        blurRadius: '5',
-        spreadRadius: '0',
-        color: 'rgba(0, 0, 0, 0.5)',
-        inset: false,
-        enabled: true,
-    });
-
-    const handleAddShadow = () => onChange([...shadows, defaultShadow()]);
-
-    const updateShadow = (index: number, updated: ShadowData) => {
-        const newShadows = [...shadows];
-        newShadows[index] = updated;
-        onChange(newShadows);
-    };
-
-    const removeShadow = (index: number) => {
-        const newShadows = shadows.filter((_, i) => i !== index);
-        onChange(newShadows);
-    };
-
-    const resetShadow = (index: number) => {
-        const newShadows = [...shadows];
-        newShadows[index] = defaultShadow();
-        onChange(newShadows);
-    };
-
-    return (
-        <div style={{ padding: '1rem' }}>
-            <h4>Shadow Configurator</h4>
-            <Button onClick={handleAddShadow}>Add Shadow</Button>
-            {shadows.map((shadow, index) => (
-                <Shadow
-                    key={index}
-                    shadowData={shadow}
-                    onChange={(updated) => updateShadow(index, updated)}
-                    onRemove={() => removeShadow(index)}
-                    onReset={() => resetShadow(index)}
-                />
-            ))}
-        </div>
-    );
-};
 
 
 
