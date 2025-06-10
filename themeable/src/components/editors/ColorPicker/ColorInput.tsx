@@ -25,16 +25,12 @@ export const ColorInput: React.FC = () => {
             setHex(rgbToHex(newR, newG, newB));
         }
         else {
-
             const [newH, newS, newL] = rgbToHsl(r, g, b);
             setH(newH);
             setS(newS);
             setL(newL);
             setHex(rgbToHex(r, g, b));
-
-
         }
-
     }, [mode]);
 
     // Update RGB when HSL changes

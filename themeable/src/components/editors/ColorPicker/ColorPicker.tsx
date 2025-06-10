@@ -132,7 +132,7 @@ export const ColorPicker: React.FC = () => {
         const gradient = ctx.createLinearGradient(0, 0, width, 0);
         console.log("Drawing opacity gradient with alpha:", hue, r, g, b, alpha);
         gradient.addColorStop(0, `hsla(${hue}, ${saturation}%, 50%, 0)`);
-        gradient.addColorStop(1, `hsla(${hue}, ${saturation}%, 50%, 1)`);
+        gradient.addColorStop(1, `hsla(${hue}, ${saturation}%, ${lightness}%, 1)`);
         // if (showHSL) {
         // }
         // else {
@@ -160,7 +160,7 @@ export const ColorPicker: React.FC = () => {
         ctx.arcTo(centerX - radius, centerY - thumbHeight / 2, centerX - radius, centerY, radius);
         ctx.closePath();
 
-        // gradient.addColorStop(0, `hsla(${hue}, ${saturation}%, 50%, 0)`);
+        gradient.addColorStop(0, `hsla(${hue}, ${saturation}%, 50%, 0)`);
         ctx.fill();
 
         // White outer border
@@ -175,10 +175,15 @@ export const ColorPicker: React.FC = () => {
     };
 
     const handleOpacityInteraction = (clientX: number) => {
-        const rect = opacityRef.current!.getBoundingClientRect();
-        const x = Math.max(0, Math.min(clientX - rect.left, canvasSize));
-        setAlpha(x / canvasSize);
+        const rect = opacityRef.current?.getBoundingClientRect();
+        if (!rect) return;
+
+        const x = Math.max(0, Math.min(clientX - rect.left, rect.width));
+        const newAlpha = x / rect.width;
+
+        setAlpha(Number(newAlpha.toFixed(3))); // Optional: limit precision
     };
+
 
     const handleOpacityMouseDown = (e: React.MouseEvent) => {
         setIsOpacityDragging(true);
@@ -211,25 +216,41 @@ export const ColorPicker: React.FC = () => {
         const width = canvasSize;
         const height = canvasSize;
 
-        // const gradient1 = ctx.createLinearGradient(0, 0, width, 0);
-        // gradient1.addColorStop(0, "white");
-        // // gradient1.addColorStop(1, `hsl(${hue}, 100%, 50%)`);
-        // gradient1.addColorStop(1, `transparent`);
-        // ctx.fillStyle = gradient1;
-        // ctx.fillRect(0, 0, width, height);
-
-        // const gradient2 = ctx.createLinearGradient(0, 0, 0, height);
-        // gradient2.addColorStop(0, `hsl(${hue}, ${saturation}%, 50%)`);
-        // gradient2.addColorStop(1, `hsl(${hue}, ${saturation}%, 0%)`);
-        // ctx.fillStyle = gradient2;
-        // ctx.fillRect(0, 0, width, height);
-
-
-
 
         // 1. Fill background with base color at 50% lightness
         ctx.fillStyle = `hsl(${hue}, ${saturation}%, 50%)`;
         ctx.fillRect(0, 0, width, height);
+
+
+
+
+        // let gradient = ctx.createLinearGradient(0, 0, width, 0); // horizontal
+
+        // gradient.addColorStop(0.00, "#f00");  // red
+        // gradient.addColorStop(0.17, "#ff0");  // yellow
+        // gradient.addColorStop(0.33, "#0f0");  // green
+        // gradient.addColorStop(0.50, "#0ff");  // cyan
+        // gradient.addColorStop(0.67, "#00f");  // blue
+        // gradient.addColorStop(0.83, "#f0f");  // magenta
+        // gradient.addColorStop(1.00, "#f00");  // red (loop)
+
+        // ctx.fillStyle = gradient;
+        // ctx.fillRect(0, 0, width, height);
+
+        // gradient = ctx.createLinearGradient(0, height, 0, 0); // vertical (bottom → top)
+
+        // gradient.addColorStop(0.00, "#f00");
+        // gradient.addColorStop(0.17, "#ff0");
+        // gradient.addColorStop(0.33, "#0f0");
+        // gradient.addColorStop(0.50, "#0ff");
+        // gradient.addColorStop(0.67, "#00f");
+        // gradient.addColorStop(0.83, "#f0f");
+        // gradient.addColorStop(1.00, "#f00");
+
+        // ctx.fillStyle = gradient;
+        // ctx.fillRect(0, 0, width, height);
+
+
 
         // 2. Apply LEFT-to-RIGHT white overlay (lightness 100% -> 50%)
         const gradient1 = ctx.createLinearGradient(0, 0, width, 0);
@@ -238,37 +259,16 @@ export const ColorPicker: React.FC = () => {
         ctx.fillStyle = gradient1;
         ctx.fillRect(0, 0, width, height);
 
-        // 3. Apply TOP-to-BOTTOM black overlay (lightness 50% -> 0%)
-        const gradient2 = ctx.createLinearGradient(0, 0, 0, height);
-        gradient2.addColorStop(0, "transparent"); // starts at base color
-        gradient2.addColorStop(1, "black");       // darkens toward bottom
+        // 3. Apply BOTTOM-to-TOP black overlay (lightness 0% → 50%)
+        const gradient2 = ctx.createLinearGradient(0, height, 0, 0); // bottom → top
+        gradient2.addColorStop(0, "black");              // bottom
+        gradient2.addColorStop(1, "rgba(0,0,0,0)");       // top
         ctx.fillStyle = gradient2;
         ctx.fillRect(0, 0, width, height);
 
 
 
-
-
-
-        // Fill with hue
-        // ctx.fillStyle = `hsl(${hue}, 100%, 50%)`;
-        // ctx.fillRect(0, 0, width, height);
-
-        // // White gradient from left
-        // const whiteGradient = ctx.createLinearGradient(0, 0, width, 0);
-        // whiteGradient.addColorStop(0, "white");
-        // whiteGradient.addColorStop(1, "transparent");
-        // ctx.fillStyle = whiteGradient;
-        // ctx.fillRect(0, 0, width, height);
-
-        // // Black gradient from top
-        // const blackGradient = ctx.createLinearGradient(0, 0, 0, height);
-        // blackGradient.addColorStop(0, "transparent");
-        // blackGradient.addColorStop(1, "black");
-        // ctx.fillStyle = blackGradient;
-        // ctx.fillRect(0, 0, width, height);
-
-
+        // 4. Draw the picker thumb
         ctx.beginPath();
         ctx.arc(pickerPos.x, pickerPos.y, 10, 0, 2 * Math.PI);
         ctx.strokeStyle = "#000";
@@ -284,21 +284,38 @@ export const ColorPicker: React.FC = () => {
 
     const handlePickerInteraction = (clientX: number, clientY: number) => {
         const rect = pickerRef.current!.getBoundingClientRect();
+
         const x = Math.max(0, Math.min(clientX - rect.left, canvasSize));
         const y = Math.max(0, Math.min(clientY - rect.top, canvasSize));
 
-        const sat = Math.max(0, Math.min(100, (x / canvasSize) * 100));
-        const light = Math.max(0, Math.min(100, 50 - (y / canvasSize) * 100));
+        // Saturation: left (0) → right (100)
+        const sat = (x / canvasSize) * 100;
 
-        console.log("Picker interaction at:", x, y, "Saturation:", sat, "Lightness:", light);
+        // Lightness: bottom (0) → center (50) → top (100)
+        // But you want: bottom (0) → top (50)
+        // const light = 50 - (y / canvasSize) * 50;
+        // Lightness: top-left (100%) → bottom-right (0%)
+        const light = 100 - ((x + y) / (canvasSize * 2)) * 100;
 
-        setSaturation(sat);
-        // if (!showHSL)
-        //     setLightness(50);
-        // else
-        setLightness(light);
-        setPickerPos({ x, y });
+
+        // const clampedSat = Math.max(0, Math.min(100, sat));
+        // const clampedLight = Math.max(0, Math.min(50, light));
+        const clampedSat = Math.max(0, Math.min(100, sat));
+        const clampedLight = Math.max(0, Math.min(100, light));
+
+
+        console.log("Picker interaction at:", x, y, "Saturation:", clampedSat, "Lightness:", clampedLight);
+
+        setSaturation(clampedSat);
+        setLightness(clampedLight);
+        if (y === 240) {
+            setPickerPos({ x: 0, y: canvasSize });
+        }
+        else {
+            setPickerPos({ x, y });
+        }
     };
+
 
 
     const handleMouseDown = (e: React.MouseEvent) => {
@@ -358,13 +375,6 @@ export const ColorPicker: React.FC = () => {
         setHexInput(rgbToHex(r, g, b));
     }, [hue, saturation, lightness, alpha, pickerPos, showHSL, r, g, b]);
 
-
-    // useEffect(() => {
-    //     const stopDragging = () => setIsDragging(false);
-    //     window.addEventListener("mouseup", stopDragging);
-    //     return () => window.removeEventListener("mouseup", stopDragging);
-    // }, []);
-
     useEffect(() => {
         const handleMouseMove = (e: MouseEvent) => {
             if (isDragging) handlePickerInteraction(e.clientX, e.clientY);
@@ -381,12 +391,6 @@ export const ColorPicker: React.FC = () => {
         };
     }, [isDragging]);
 
-
-    // useEffect(() => {
-    //     const stopDragging = () => setIsHueDragging(false);
-    //     window.addEventListener("mouseup", stopDragging);
-    //     return () => window.removeEventListener("mouseup", stopDragging);
-    // }, []);
     useEffect(() => {
         const handleMouseMove = (e: MouseEvent) => {
             if (isHueDragging) handleHueInteraction(e.clientX);
