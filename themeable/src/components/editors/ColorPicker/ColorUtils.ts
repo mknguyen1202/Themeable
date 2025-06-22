@@ -1,3 +1,7 @@
+
+
+
+
 export function hslToRgb(h: number, s: number, l: number): [number, number, number] {
     s /= 100;
     l /= 100;
@@ -15,27 +19,26 @@ export function rgbToHsl(r: number, g: number, b: number): [number, number, numb
     r /= 255;
     g /= 255;
     b /= 255;
-    console.log(`Converting RGB(${r}, ${g}, ${b}) to HSL...`);
-    const max = Math.max(r, g, b), min = Math.min(r, g, b);
-    let h = 0, s: number, l = (max + min) / 2;
 
-    if (max === min) {
-        h = s = 0; // achromatic
-    } else {
-        const delta = max - min;
-        s = l > 0.5 ? delta / (2 - max - min) : delta / (max + min);
+    const max = Math.max(r, g, b);
+    const min = Math.min(r, g, b);
+    let h = 0, s = 0;
+    const l = (max + min) / 2;
+
+    if (max !== min) {
+        const d = max - min;
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
         switch (max) {
-            case r: h = ((g - b) / delta + (g < b ? 6 : 0)); break; // red is sector 0-120
-            case g: h = ((b - r) / delta + 2); break;   // green is sector 120-240, +2 shifts into the correct 60* slice
-            case b: h = ((r - g) / delta + 4); break;   // blue is sector 240-360
+            case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+            case g: h = (b - r) / d + 2; break;
+            case b: h = (r - g) / d + 4; break;
         }
         h *= 60;
     }
 
-    console.log(`Converted RGB(${r}, ${g}, ${b}) to HSL(${h}, ${s * 100}%, ${l * 100}%)`);
-
-    return [Math.round(h), Math.round(s * 100), Math.round(l * 100)];
+    return [h, s * 100, l * 100]; // return float percentages
 }
+
 
 
 export function rgbToHex(r: number, g: number, b: number): string {

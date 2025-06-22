@@ -14,15 +14,15 @@ import { Slider } from './components/Slider/Slider';
 import { Thumb } from './components/Slider/types';
 import { MultiThumbSlider } from './components/Slider/MultiThumbSlider';
 
-import { ColorPicker } from './components/editors/ColorPicker/ColorPicker';
 
 import { ShadowData } from './components/editors/ShadowConfigurator/types';
 import { Shadow, ShadowConfigurator } from './components/editors/ShadowConfigurator/ShadowConfigurator';
 import { Draggable } from './components/editors/Draggable/Draggable';
-import { ColorInput } from './components/editors/ColorPicker/ColorInput';
+// import { ColorInput } from './components/editors/ColorPicker/ColorInput';
 
 
-
+import ColorPicker from './components/editors/ColorPicker/ColorPicker';
+import { HSLAColor } from './components/editors/ColorPicker/types';
 
 
 function App() {
@@ -44,10 +44,13 @@ function App() {
             enabled: true,
         },]);
 
+
+    const [color, setColor] = useState<HSLAColor>({ h: 200, s: 80, l: 50, a: 0.8 });
+
     return (
         <div className="App">
-            <ColorPicker />
-            <ColorInput />
+            <ColorPicker value={color} onChange={setColor} />
+            {/* <ColorInput /> */}
             {/* <ShadowConfigurator shadows={shadows} onChange={setShadows} /> */}
             {/* <Draggable /> */}
             {/* <MultiThumbSlider
