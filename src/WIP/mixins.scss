@@ -1,0 +1,259 @@
+/*
+ * Themeable – SCSS Mixins (CSS‑Var Consumers)
+ * -------------------------------------------------
+ * Purpose: ergonomic SCSS helpers that consume the CSS variables
+ * emitted by the resolver. These mixins DO NOT bake tokens at build time;
+ * they reference runtime CSS custom properties (so themes can change live).
+ *
+ * How to use:
+ *  1) Ensure your app loads variables via the TS resolver (attachStyleTag / SSR).
+ *  2) Import these mixins anywhere you write component CSS.
+ *  3) Compose the primitives (@include elevation(2); @include focus-ring();) and
+ *     family recipes (@include surface('outlined'); etc.).
+ */
+
+// -------------------------------------------------
+// Config
+// -------------------------------------------------
+
+$t-prefix: "t" !default; // matches resolveTokens cssVarPrefix
+
+// String replace helper (Sass implementation)
+@function t-str-replace($string, $search, $replace: "") {
+    $index: str-index($string, $search);
+    @if $index {
+        @return str-slice($string, 1, $index - 1) + $replace +
+            t-str-replace(str-slice($string, $index + str-length($search)), $search, $replace);
+    }
+    @return $string;
+}
+
+// Convert token path → CSS variable name
+@function t-var-name($path) {
+    $kebab: t-str-replace($path, ".", "-");
+    $kebab: t-str-replace($kebab, " ", "-");
+    @return "--#{$t-prefix}-#{to-lower-case($kebab)}";
+}
+
+// Read a token as var(--t-...); optional fallback
+@function t($path, $fallback: null) {
+    $var: t-var-name($path);
+    @if $fallback == null {
+        @return var(#{$var});
+    }
+    @return var(#{$var}, #{$fallback});
+}
+
+// Lowercase helper for older Sass without built-in to-lower-case
+@function to-lower-case($str) {
+    $lower: "";
+    $a: "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    $b: "abcdefghijklmnopqrstuvwxyz";
+    @for $i from 1 through str-length($str) {
+        $ch: str-slice($str, $i, $i);
+        $pos: str-index($a, $ch);
+        $lower: $lower + if($pos, str-slice($b, $pos, $pos), $ch);
+    }
+    @return $lower;
+}
+
+// -------------------------------------------------
+// Primitives
+// -------------------------------------------------
+
+@mixin focus-ring($inset: false) {
+    outline-color: t("focus.ring.color");
+    outline-style: t("focus.ring.style", solid);
+    outline-width: t("focus.ring.width", 2px);
+    @if $inset {
+        box-shadow: 0 0 0 t("aliases.unit.focusRingOffset", 2px) t("focus.ring.color") inset;
+    } @else {
+        outline-offset: t("aliases.unit.focusRingOffset", 2px);
+    }
+}
+
+@mixin elevation($level) {
+    // expects tokens like elevation.0, elevation.1 ...
+    box-shadow: t("elevation.#{$level}", none);
+}
+
+@mixin radius($size) {
+    border-radius: t("radius.#{$size}", 8px);
+}
+@mixin surface-bg($key: "bg.raised") {
+    background-color: t("color.#{$key}");
+}
+@mixin text-color($key: "fg.primary") {
+    color: t("color.#{$key}");
+}
+@mixin border($key: "border.subtle", $width: 1px, $style: solid) {
+    border-color: t("color.#{$key}");
+    border-width: $width;
+    border-style: $style;
+}
+
+@mixin control-box($height: null, $px: null, $gap: null) {
+    height: if($height == null, t("density.cozy.controlHeight", 40px), $height);
+    padding-inline: if($px == null, t("density.cozy.paddingX", 12px), $px);
+    gap: if($gap == null, t("density.cozy.gap", 8px), $gap);
+}
+
+@mixin interactive-states($use-shadow: true) {
+    transition:
+        background-color t("motion.duration.base", 180ms) t("motion.easing.standard", ease),
+        box-shadow t("motion.duration.base", 180ms) t("motion.easing.standard", ease),
+        transform t("motion.duration.base", 180ms) t("motion.easing.standard", ease),
+        filter t("motion.duration.base", 180ms) t("motion.easing.standard", ease);
+
+    &:hover {
+        @if $use-shadow {
+            @include elevation(2);
+        }
+        filter: brightness(1.05);
+    }
+    &:active {
+        transform: t("motion.transform.press", scale(0.98));
+        @include elevation(1);
+    }
+    &:disabled {
+        opacity: t("opacity.disabled", 0.5);
+        cursor: not-allowed;
+        @include elevation(0);
+    }
+    &:focus-visible {
+        @include focus-ring();
+    }
+}
+
+// -------------------------------------------------
+// Families (recipes) – map to token families.*
+// -------------------------------------------------
+
+@mixin family($name) {
+    @if $name == "flat" {
+        @include surface-bg("bg.surface");
+        @include text-color("fg.primary");
+        @include border("border.subtle");
+        @include elevation(0);
+        @include radius(md);
+    } @else if $name == "elevated" {
+        @include surface-bg("bg.raised");
+        @include text-color("fg.primary");
+        @include elevation(2);
+    } @else if $name == "outlined" {
+        background-color: transparent;
+        @include border("border.strong");
+    } @else if $name == "ghost" {
+        background-color: transparent;
+        @include text-color("fg.primary");
+    } @else if $name == "tonal" {
+        background-color: rgba(t("color.accent.primary"), t("families.tonal.defaults.containerAlpha", 0.12));
+    } @else if $name == "glass" {
+        background-color: rgba(255, 255, 255, 0.08);
+        backdrop-filter: t("backdrop.blur.md", blur(8px));
+        border: 1px solid rgba(255, 255, 255, 0.18);
+    } @else if $name == "gradient" {
+        background-image: t("gradient.primaryLinear");
+        color: t("color.fg.onAccent");
+    }
+}
+
+// -------------------------------------------------
+// Components – optional sugar built on primitives
+// -------------------------------------------------
+
+// Button container (semantic; not variant-specific token lookup)
+@mixin button-container($family: "elevated") {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    @include control-box();
+    @include radius(lg);
+    @include family($family);
+    @include interactive-states(true);
+}
+
+// Button label
+@mixin button-label() {
+    font-family: t("typography.font.family.base", system-ui);
+    font-size: t("typography.size.md", 14px);
+    font-weight: t("typography.font.weight.medium", 500);
+    line-height: t("typography.lineHeight.base", 1.4);
+    letter-spacing: t("typography.letterSpacing.normal", 0);
+}
+
+// Outlined + Text variants
+@mixin button-outlined() {
+    background-color: transparent;
+    @include border("border.strong");
+}
+@mixin button-text() {
+    background-color: transparent;
+    box-shadow: none;
+    padding-inline: 8px;
+}
+
+// IconButton (circle)
+@mixin icon-button() {
+    display: grid;
+    place-items: center;
+    width: t("size.scale.sm", 32px);
+    height: t("size.scale.sm", 32px);
+    border-radius: t("radius.full", 9999px);
+    background-color: transparent;
+    @include interactive-states(true);
+}
+
+// Input field
+@mixin input-field($variant: "outlined") {
+    @include control-box();
+    @include radius(md);
+    background-color: if($variant == "filled", rgba(255, 255, 255, 0.04), t("color.bg.surfaceAlt"));
+    border: if($variant == "underlined", 0, 1px solid t("color.border.subtle"));
+    border-bottom: if($variant == "underlined", 1px solid t("color.border.strong"), null);
+    color: t("color.fg.primary");
+    &:hover {
+        border-color: t("color.border.strong");
+    }
+    &:focus {
+        @include focus-ring();
+    }
+    &[aria-invalid="true"] {
+        border-color: t("color.status.danger");
+    }
+    &:disabled {
+        opacity: t("opacity.disabled", 0.5);
+        cursor: not-allowed;
+    }
+}
+
+// Table zebra + sticky header helpers
+@mixin table-zebra() {
+    tr:nth-child(even) td {
+        background-color: rgba(255, 255, 255, 0.02);
+    }
+}
+@mixin table-sticky-header() {
+    th {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+}
+
+// -------------------------------------------------
+// Example usage (documentation only)
+// -------------------------------------------------
+/*
+.button { @include button-container('elevated');
+  &--filled { background-color: t('color.accent.primary'); color: t('color.fg.onAccent'); box-shadow: t('elevation.2'); }
+  &--outlined { @include button-outlined(); }
+  &--text { @include button-text(); }
+  &__label { @include button-label(); }
+}
+
+.icon-btn { @include icon-button(); }
+
+.input { @include input-field('outlined'); }
+.table { @include table-zebra(); @include table-sticky-header(); }
+*/

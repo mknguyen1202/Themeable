@@ -1,0 +1,108 @@
+/* Demo Root Styles */
+
+.demo-root {
+    height: 100vh;
+    overflow: hidden;
+    transition: background-color 300ms ease, color 300ms ease;
+    position: relative;
+}
+
+.demo-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.demo-content {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+    min-height: 0;
+}
+
+/* ─── Light theme backgrounds ─── */
+
+.demo-root.light {
+    background: var(--surface-base, #ffffff);
+}
+
+.demo-root.light[data-theme="solar"] {
+    background: linear-gradient(180deg, #FFFFFF 0%, #FFF7ED 100%);
+}
+
+/* ─── Dark theme backgrounds ─── */
+
+.demo-root.dark {
+    background: var(--canvas-bg, #0B0B0C);
+}
+
+.demo-root.dark[data-theme="lunar"] {
+    background: linear-gradient(180deg, #0B1220 0%, #111B2E 100%);
+}
+
+.demo-root.dark[data-theme="aurora"] {
+    background: linear-gradient(180deg, #0B0B0C 0%, #150D1D 100%);
+}
+
+.demo-root.dark[data-theme="highContrast"] {
+    background: #000000;
+}
+
+/* ─── Glass family background ─── */
+
+.demo-root[data-family="glass"]::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.demo-root.light[data-family="glass"]::before {
+    background:
+        radial-gradient(ellipse at 20% 30%, rgba(255, 107, 107, 0.25) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 20%, rgba(78, 205, 196, 0.25) 0%, transparent 50%),
+        radial-gradient(ellipse at 40% 70%, rgba(255, 195, 113, 0.25) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 80%, rgba(199, 125, 255, 0.25) 0%, transparent 50%);
+    filter: blur(80px);
+}
+
+.demo-root.dark[data-family="glass"]::before {
+    background:
+        radial-gradient(ellipse at 20% 30%, rgba(138, 58, 185, 0.30) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 20%, rgba(30, 144, 255, 0.30) 0%, transparent 50%),
+        radial-gradient(ellipse at 40% 70%, rgba(255, 107, 129, 0.30) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 80%, rgba(0, 230, 180, 0.30) 0%, transparent 50%);
+    filter: blur(80px);
+}
+
+.demo-root[data-family="glass"] .demo-container {
+    position: relative;
+    z-index: 1;
+}
+
+@supports (backdrop-filter: blur(40px)) or (-webkit-backdrop-filter: blur(40px)) {
+    .demo-root[data-family="glass"] .theme-switcher {
+        backdrop-filter: blur(40px) saturate(150%);
+        -webkit-backdrop-filter: blur(40px) saturate(150%);
+        background: color-mix(in srgb, var(--surface-raised, #fff) 70%, transparent);
+    }
+}
+
+/* ─── Smooth transitions (non-disruptive) ─── */
+
+.demo-root *:not(button):not(input):not(textarea):not(select) {
+    transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease;
+}
+
+/* ─── Responsive ─── */
+
+@media (max-width: 768px) {
+    .demo-container {
+        padding: 0;
+    }
+}

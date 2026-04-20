@@ -1,0 +1,78 @@
+.scroll-input {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: var(--surface-base, #fff);
+    border: 1px solid color-mix(in srgb, var(--text-muted, #94A3B8) 30%, transparent);
+    border-radius: 6px;
+    overflow: hidden;
+    transition: border-color 150ms ease;
+}
+
+.scroll-input:focus-within {
+    border-color: var(--text-primary, #0F172A);
+}
+
+.scroll-input-field {
+    flex: 1;
+    padding: 7px 10px;
+    border: none;
+    background: transparent;
+    font-size: 13px;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    color: var(--text-primary, #0F172A);
+    outline: none;
+    min-width: 0;
+}
+
+.scroll-input-field::-webkit-inner-spin-button,
+.scroll-input-field::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.scroll-input-field[type=number] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+.scroll-input-suffix {
+    padding-right: 8px;
+    font-size: 11px;
+    color: var(--text-muted, #94A3B8);
+    user-select: none;
+}
+
+.scroll-input-controls {
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid color-mix(in srgb, var(--text-muted, #94A3B8) 20%, transparent);
+}
+
+.scroll-input-btn {
+    width: 20px;
+    height: 14px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: var(--text-muted, #94A3B8);
+    font-size: 7px;
+    cursor: pointer;
+    transition: all 100ms ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.scroll-input-btn:hover {
+    background: color-mix(in srgb, var(--text-muted, #94A3B8) 12%, transparent);
+    color: var(--text-primary, #0F172A);
+}
+
+.scroll-input-btn:active {
+    background: color-mix(in srgb, var(--text-muted, #94A3B8) 20%, transparent);
+}
+
+.scroll-input-btn-up {
+    border-bottom: 1px solid color-mix(in srgb, var(--text-muted, #94A3B8) 12%, transparent);
+}

@@ -1,0 +1,58 @@
+.editor-root {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: var(--surface-base, #fafafa);
+    color: var(--text-primary, #1a1a1a);
+}
+
+.editor-header {
+    flex-shrink: 0;
+    padding: 16px 20px 0;
+}
+
+.editor-title {
+    margin: 0 0 12px 0;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--text-muted, #94A3B8);
+}
+
+.editor-tabs {
+    display: flex;
+    gap: 2px;
+    border-bottom: 1px solid color-mix(in srgb, var(--text-muted, #94A3B8) 18%, transparent);
+}
+
+.editor-tab {
+    flex: 1;
+    padding: 8px 12px;
+    border: none;
+    background: transparent;
+    color: var(--text-secondary, #64748B);
+    font-size: 13px;
+    font-weight: 500;
+    font-family: inherit;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: color 150ms ease, border-color 150ms ease;
+}
+
+.editor-tab:hover {
+    color: var(--text-primary, #0F172A);
+}
+
+.editor-tab.active {
+    color: var(--text-primary, #0F172A);
+    font-weight: 600;
+    border-bottom-color: var(--text-primary, #0F172A);
+}
+
+.editor-content {
+    flex: 1;
+    overflow: auto;
+    padding: 20px;
+}

@@ -1,0 +1,187 @@
+.color-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.color-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.color-panel-header h3 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary, #0F172A);
+}
+
+.color-tools {
+    display: flex;
+    gap: 2px;
+    padding: 3px;
+    background: color-mix(in srgb, var(--text-muted, #94A3B8) 10%, transparent);
+    border-radius: 8px;
+}
+
+.tool-btn {
+    flex: 1;
+    padding: 6px;
+    border: none;
+    background: transparent;
+    color: var(--text-secondary, #64748B);
+    font-size: 12px;
+    font-weight: 500;
+    font-family: inherit;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 120ms ease;
+}
+
+.tool-btn:hover {
+    color: var(--text-primary, #0F172A);
+}
+
+.tool-btn.active {
+    background: var(--surface-base, #fff);
+    color: var(--text-primary, #0F172A);
+    font-weight: 600;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.color-section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.color-preview-large {
+    height: 80px;
+    border-radius: 8px;
+    border: 1px solid color-mix(in srgb, var(--text-muted, #94A3B8) 15%, transparent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.color-value-display {
+    padding: 4px 10px;
+    background: rgba(0, 0, 0, 0.55);
+    color: white;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 12px;
+    backdrop-filter: blur(8px);
+}
+
+.color-input-group {
+    display: flex;
+    gap: 6px;
+}
+
+.color-picker-input {
+    width: 40px;
+    height: 32px;
+    border: 1px solid color-mix(in srgb, var(--text-muted, #94A3B8) 30%, transparent);
+    border-radius: 5px;
+    cursor: pointer;
+    flex-shrink: 0;
+    padding: 2px;
+}
+
+.color-text-input {
+    flex: 1;
+    padding: 7px 10px;
+    border: 1px solid color-mix(in srgb, var(--text-muted, #94A3B8) 30%, transparent);
+    border-radius: 6px;
+    font-size: 12px;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    background: var(--surface-base, #fff);
+    color: var(--text-primary, #0F172A);
+    transition: border-color 150ms ease;
+}
+
+.color-text-input:focus {
+    outline: none;
+    border-color: var(--text-primary, #0F172A);
+}
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.form-field label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-muted, #94A3B8);
+}
+
+.btn-group-sm {
+    display: flex;
+    gap: 2px;
+    padding: 3px;
+    background: color-mix(in srgb, var(--text-muted, #94A3B8) 10%, transparent);
+    border-radius: 8px;
+}
+
+.btn-group-sm button {
+    flex: 1;
+    padding: 5px;
+    border: none;
+    background: transparent;
+    color: var(--text-secondary, #64748B);
+    font-size: 12px;
+    font-weight: 500;
+    font-family: inherit;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 120ms ease;
+}
+
+.btn-group-sm button:hover {
+    color: var(--text-primary, #0F172A);
+}
+
+.btn-group-sm button.active {
+    background: var(--surface-base, #fff);
+    color: var(--text-primary, #0F172A);
+    font-weight: 600;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.hue-bar {
+    height: 12px;
+    border-radius: 6px;
+    border: 1px solid color-mix(in srgb, var(--text-muted, #94A3B8) 20%, transparent);
+}
+
+.ramp-grid-compact {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+}
+
+.ramp-swatch-compact {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.ramp-color-compact {
+    width: 100%;
+    height: 40px;
+    border-radius: 6px;
+    border: 1px solid color-mix(in srgb, var(--text-muted, #94A3B8) 12%, transparent);
+}
+
+.ramp-index-compact {
+    font-size: 10px;
+    font-weight: 600;
+    text-align: center;
+    color: var(--text-muted, #94A3B8);
+}

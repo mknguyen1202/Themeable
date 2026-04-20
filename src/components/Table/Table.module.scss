@@ -1,0 +1,429 @@
+// ── Outer wrapper ──────────────────────────────────────────────────────────
+.tableWrapper {
+    width: 100%;
+    border: var(--border-width, 1px) var(--border-style, solid) var(--table-border-color);
+    border-radius: var(--table-radius);
+    overflow: hidden;
+    position: relative;
+
+    // When toolbar is present, table container loses its top radius
+    &.hasToolbar .tableContainer {
+        border-top: none;
+    }
+
+    // When pagination is present, table container loses its bottom radius
+    &.hasPagination .tableContainer {
+        border-bottom: none;
+    }
+}
+
+// ── Scroll container ───────────────────────────────────────────────────────
+.tableContainer {
+    width: 100%;
+    overflow-x: auto;
+}
+
+// ── Toolbar ────────────────────────────────────────────────────────────────
+.toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    background: var(--table-header-bg);
+    border-bottom: 1px solid var(--table-border-color);
+}
+
+.toolbarLeft {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 1;
+}
+
+.toolbarRight {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.searchBox {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    background: var(--surface-base);
+    border: 1px solid var(--table-border-color);
+    border-radius: var(--radius-sm, 4px);
+    padding: 0.25rem 0.5rem;
+    min-width: 220px;
+
+    &:focus-within {
+        border-color: var(--intent-primary);
+        outline: 2px solid color-mix(in srgb, var(--intent-primary) 25%, transparent);
+    }
+}
+
+.searchIcon {
+    color: var(--text-muted, #94a3b8);
+    flex-shrink: 0;
+}
+
+.searchInput {
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 0.8125rem;
+    color: var(--text-primary);
+    width: 100%;
+
+    &::placeholder {
+        color: var(--text-muted, #94a3b8);
+    }
+}
+
+.searchClear {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-muted, #94a3b8);
+    font-size: 1.125rem;
+    line-height: 1;
+    padding: 0 0.125rem;
+    flex-shrink: 0;
+    &:hover {
+        color: var(--text-primary);
+    }
+}
+
+// ── Column toggler ─────────────────────────────────────────────────────────
+.columnTogglerWrap {
+    position: relative;
+}
+
+.columnTogglerBtn {
+    background: none;
+    border: 1px solid var(--table-border-color);
+    border-radius: var(--radius-sm, 4px);
+    padding: 0.3125rem 0.5rem;
+    cursor: pointer;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    transition:
+        background 0.15s,
+        color 0.15s;
+
+    &:hover {
+        background: var(--surface-base);
+        color: var(--text-primary);
+    }
+}
+
+.columnTogglerDropdown {
+    position: absolute;
+    right: 0;
+    top: calc(100% + 4px);
+    background: var(--surface-raised);
+    border: 1px solid var(--table-border-color);
+    border-radius: var(--radius-md, 6px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    z-index: 200;
+    min-width: 160px;
+    padding: 0.25rem;
+}
+
+.columnTogglerTitle {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--text-muted, #94a3b8);
+    padding: 0.25rem 0.5rem 0.125rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.columnTogglerItem {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.375rem 0.5rem;
+    border-radius: var(--radius-sm, 4px);
+    cursor: pointer;
+    font-size: 0.875rem;
+    color: var(--text-primary);
+    user-select: none;
+
+    &:hover {
+        background: var(--surface-sunken);
+    }
+    input[type="checkbox"] {
+        cursor: pointer;
+    }
+}
+
+// ── Control cells (expand toggle + checkbox) ───────────────────────────────
+.controlCell {
+    width: 2.5rem;
+    text-align: center;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+.checkboxCell {
+    width: 2.5rem;
+    text-align: center;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+// ── Expand button ──────────────────────────────────────────────────────────
+.expandBtn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-muted, #94a3b8);
+    font-size: 0.5rem;
+    padding: 0.25rem;
+    transition:
+        transform 0.15s ease,
+        color 0.15s;
+    line-height: 1;
+
+    &:hover {
+        color: var(--text-primary);
+    }
+}
+
+.expandBtnOpen {
+    transform: rotate(90deg);
+    color: var(--intent-primary);
+}
+
+.expandedRow {
+    background: var(--surface-sunken);
+}
+
+.expandedCell {
+    padding: 0.875rem 1.25rem;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    border-bottom: 1px solid var(--table-border-color);
+}
+
+// ── Skeleton loading ───────────────────────────────────────────────────────
+.skeleton {
+    height: 0.875rem;
+    border-radius: 4px;
+    background: linear-gradient(90deg, var(--surface-sunken) 25%, var(--surface-base) 50%, var(--surface-sunken) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s infinite linear;
+}
+
+@keyframes shimmer {
+    from {
+        background-position: 200% 0;
+    }
+    to {
+        background-position: -200% 0;
+    }
+}
+
+// ── Pagination bar ─────────────────────────────────────────────────────────
+.paginationBar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    background: var(--table-header-bg);
+    border-top: 1px solid var(--table-border-color);
+}
+
+.paginationSummary {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+}
+
+.paginationControls {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.pageSizeSelect {
+    border: 1px solid var(--table-border-color);
+    border-radius: var(--radius-sm, 4px);
+    padding: 0.25rem 0.375rem;
+    font-size: 0.8125rem;
+    background: var(--surface-base);
+    color: var(--text-primary);
+    cursor: pointer;
+    margin-right: 0.375rem;
+    &:focus {
+        outline: 2px solid var(--intent-primary);
+        outline-offset: 1px;
+    }
+}
+
+.pageBtn {
+    min-width: 2rem;
+    height: 2rem;
+    border: 1px solid var(--table-border-color);
+    border-radius: var(--radius-sm, 4px);
+    background: var(--surface-base);
+    color: var(--text-primary);
+    cursor: pointer;
+    font-size: 0.8125rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+
+    &:hover:not(:disabled) {
+        background: var(--surface-sunken);
+    }
+    &:disabled {
+        opacity: 0.4;
+        cursor: default;
+    }
+}
+
+.pageBtnActive {
+    background: var(--intent-primary) !important;
+    color: #fff;
+    border-color: var(--intent-primary);
+    font-weight: 600;
+}
+
+.pageEllipsis {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2rem;
+    height: 2rem;
+    font-size: 0.8125rem;
+    color: var(--text-muted, #94a3b8);
+}
+
+// ── Table foot ─────────────────────────────────────────────────────────────
+.tableFoot {
+    background: var(--table-header-bg);
+
+    td,
+    th {
+        font-weight: 600;
+        color: var(--table-header-text-color);
+        border-top: 2px solid var(--table-border-color);
+        border-bottom: none;
+    }
+}
+
+// ── Existing structural styles (unchanged) ─────────────────────────────────
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--table-bg);
+    font-size: var(--font-size-sm, 0.875rem);
+
+    &.bordered {
+        border: 1px solid var(--table-border-color);
+
+        .tableHeaderCell,
+        .tableCell {
+            border: 1px solid var(--table-border-color);
+        }
+    }
+
+    &.stickyHeader .tableHead {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+
+    &.hoverable .tableRow:not(.expandedRow):hover {
+        background: var(--table-hover-bg);
+    }
+}
+
+.tableHead {
+    background: var(--table-header-bg);
+}
+
+.tableHeaderCell {
+    padding: var(--table-padding);
+    font-weight: 600;
+    color: var(--table-header-text-color);
+    text-align: left;
+    border-bottom: 2px solid var(--table-border-color);
+    white-space: nowrap;
+
+    &.sortable {
+        cursor: pointer;
+        user-select: none;
+        &:hover {
+            background: rgba(0, 0, 0, 0.04);
+        }
+    }
+
+    &.sorted {
+        background: rgba(0, 0, 0, 0.04);
+    }
+}
+
+.headerContent {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs, 0.5rem);
+}
+
+.sortIndicator {
+    font-size: 0.75rem;
+    opacity: 0.45;
+    .sorted & {
+        opacity: 1;
+    }
+}
+
+.tableBody {
+    .striped & .tableRow:nth-child(even):not(.expandedRow) {
+        background: var(--table-stripe-bg);
+    }
+}
+
+.tableRow {
+    border-bottom: 1px solid var(--table-border-color);
+    transition: background 0.15s ease;
+
+    &:last-child {
+        border-bottom: none;
+    }
+    &.clickable {
+        cursor: pointer;
+    }
+
+    &.selected {
+        background: var(--table-selected-bg);
+        color: var(--table-selected-text-color);
+
+        .tableCell {
+            color: var(--table-selected-text-color);
+        }
+    }
+}
+
+.tableCell {
+    padding: var(--table-padding);
+    color: var(--table-cell-text-color);
+    border-bottom: 1px solid var(--table-border-color);
+
+    .tableRow:last-child & {
+        border-bottom: none;
+    }
+}
+
+.emptyCell {
+    padding: var(--spacing-xl, 2rem);
+    text-align: center;
+    color: var(--text-secondary);
+    font-style: italic;
+}

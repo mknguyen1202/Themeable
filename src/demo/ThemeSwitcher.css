@@ -1,0 +1,111 @@
+/* Theme Switcher — compact horizontal toolbar */
+
+.theme-switcher {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 10px 20px;
+    background: var(--surface-raised, #fff);
+    border-bottom: 1px solid color-mix(in srgb, var(--text-muted, #94A3B8) 18%, transparent);
+}
+
+.switcher-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.switcher-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--text-muted, #94A3B8);
+    white-space: nowrap;
+    user-select: none;
+}
+
+.switcher-divider {
+    width: 1px;
+    height: 24px;
+    background: color-mix(in srgb, var(--text-muted, #94A3B8) 25%, transparent);
+    flex-shrink: 0;
+}
+
+.switcher-pills {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+
+.switcher-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--text-secondary, #334155);
+    font-size: 13px;
+    font-weight: 500;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 150ms ease;
+    white-space: nowrap;
+    text-transform: capitalize;
+}
+
+.switcher-pill:hover {
+    background: color-mix(in srgb, var(--text-muted, #94A3B8) 12%, transparent);
+}
+
+.switcher-pill.active {
+    background: var(--text-primary, #0F172A);
+    color: var(--surface-base, #fff);
+    font-weight: 600;
+}
+
+.pill-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.pill-dot[data-mode="light"] {
+    background: #FCD34D;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08);
+}
+
+.pill-dot[data-mode="dark"] {
+    background: #6366F1;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+
+.switcher-pill.active .pill-dot[data-mode="light"] {
+    background: #FDE68A;
+}
+
+.switcher-pill.active .pill-dot[data-mode="dark"] {
+    background: #A5B4FC;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .theme-switcher {
+        flex-wrap: wrap;
+        padding: 8px 12px;
+        gap: 8px;
+    }
+
+    .switcher-divider {
+        display: none;
+    }
+
+    .switcher-pill {
+        padding: 4px 10px;
+        font-size: 12px;
+    }
+}

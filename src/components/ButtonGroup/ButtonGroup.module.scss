@@ -1,0 +1,45 @@
+.buttonGroup {
+    display: flex;
+    gap: var(--btn-group-gap, 0);
+
+    button {
+        border-radius: 0;
+        margin: 0;
+    }
+
+    &.horizontal {
+        flex-direction: row;
+
+        button:first-child {
+            border-top-left-radius: var(--btn-group-radius);
+            border-bottom-left-radius: var(--btn-group-radius);
+        }
+
+        button:last-child {
+            border-top-right-radius: var(--btn-group-radius);
+            border-bottom-right-radius: var(--btn-group-radius);
+        }
+
+        button:not(:last-child) {
+            border-right-width: 0;
+        }
+    }
+
+    &.vertical {
+        flex-direction: column;
+
+        button:first-child {
+            border-top-left-radius: var(--btn-group-radius);
+            border-top-right-radius: var(--btn-group-radius);
+        }
+
+        button:last-child {
+            border-bottom-left-radius: var(--btn-group-radius);
+            border-bottom-right-radius: var(--btn-group-radius);
+        }
+
+        button:not(:last-child) {
+            border-bottom-width: 0;
+        }
+    }
+}

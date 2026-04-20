@@ -1,0 +1,182 @@
+/* ── Bar variant ──────────────────────────────────── */
+.bar {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+}
+
+.barLabelRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.barLabelText {
+    font-size: var(--progress-font-size);
+    color: var(--text-secondary, #64748b);
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.barValueText {
+    font-size: var(--progress-font-size);
+    font-variant-numeric: tabular-nums;
+    color: var(--text-secondary, #64748b);
+    flex-shrink: 0;
+}
+
+.track {
+    width: 100%;
+    height: var(--progress-height);
+    background: var(--progress-track-color);
+    border-radius: var(--radius-full, 9999px);
+    overflow: hidden;
+    position: relative;
+}
+
+.fill {
+    height: 100%;
+    background: var(--progress-color);
+    border-radius: var(--radius-full, 9999px);
+    transition: width var(--motion-transition, 0.4s ease);
+    width: var(--progress-value-pct);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Stripes */
+.striped .fill::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(
+        45deg,
+        rgba(255, 255, 255, 0.2) 25%,
+        transparent 25%,
+        transparent 50%,
+        rgba(255, 255, 255, 0.2) 50%,
+        rgba(255, 255, 255, 0.2) 75%,
+        transparent 75%,
+        transparent
+    );
+    background-size: 1rem 1rem;
+}
+
+/* Animated stripes */
+.animated .fill::after {
+    animation: stripeScroll 0.6s linear infinite;
+}
+
+@keyframes stripeScroll {
+    from {
+        background-position: 0 0;
+    }
+    to {
+        background-position: 1rem 0;
+    }
+}
+
+/* Indeterminate bar */
+.indeterminate .fill {
+    width: 40% !important;
+    animation: indetermBar 1.4s ease-in-out infinite;
+    border-radius: var(--radius-full, 9999px);
+}
+
+@keyframes indetermBar {
+    0% {
+        transform: translateX(-100%);
+    }
+    60% {
+        transform: translateX(260%);
+    }
+    100% {
+        transform: translateX(260%);
+    }
+}
+
+/* ── Circle variant ───────────────────────────────── */
+.circle {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.circleSvg {
+    width: var(--progress-circle-size);
+    height: var(--progress-circle-size);
+    transform: rotate(-90deg);
+}
+
+.circleTrack {
+    fill: none;
+    stroke: var(--progress-track-color);
+    stroke-width: var(--progress-stroke-width);
+}
+
+.circleFill {
+    fill: none;
+    stroke: var(--progress-color);
+    stroke-width: var(--progress-stroke-width);
+    stroke-linecap: round;
+    stroke-dasharray: var(--progress-circumference);
+    stroke-dashoffset: var(--progress-dash-offset);
+    transition: stroke-dashoffset var(--motion-transition, 0.4s ease);
+}
+
+/* Indeterminate circle */
+.indeterminate .circleFill {
+    stroke-dasharray: calc(var(--progress-circumference) * 0.25) var(--progress-circumference);
+    animation: indetermCircle 1.4s ease-in-out infinite;
+}
+
+@keyframes indetermCircle {
+    0% {
+        stroke-dashoffset: var(--progress-circumference);
+    }
+    50% {
+        stroke-dashoffset: calc(var(--progress-circumference) * 0.25);
+    }
+    100% {
+        stroke-dashoffset: calc(var(--progress-circumference) * -1);
+    }
+}
+
+.circleValueText {
+    position: absolute;
+    font-size: var(--progress-font-size);
+    font-weight: 600;
+    color: var(--text-primary, #1e293b);
+    font-variant-numeric: tabular-nums;
+}
+
+.circleInner {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.circleLabelText {
+    font-size: var(--progress-font-size);
+    color: var(--text-secondary, #64748b);
+}
+
+/* ── Accessibility ────────────────────────────────── */
+.visuallyHidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}

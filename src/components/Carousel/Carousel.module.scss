@@ -1,0 +1,94 @@
+.carousel {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    border-radius: var(--radius-md, 8px);
+    user-select: none;
+}
+
+/* ── Track ───────────────────────────────────────── */
+.track {
+    display: flex;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+}
+
+.slide {
+    flex-shrink: 0;
+    min-width: 0;
+}
+
+/* ── Arrows ──────────────────────────────────────── */
+.arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--car-arrow-bg, rgba(0, 0, 0, 0.35));
+    color: var(--car-arrow-color, #fff);
+    border: none;
+    border-radius: 50%;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition:
+        background 0.15s ease,
+        opacity 0.15s ease;
+
+    &:hover {
+        background: var(--car-arrow-hover-bg, rgba(0, 0, 0, 0.55));
+    }
+
+    &:disabled {
+        opacity: 0.3;
+        cursor: default;
+        pointer-events: none;
+    }
+
+    svg {
+        display: block;
+    }
+}
+
+.arrowPrev {
+    left: 0.75rem;
+}
+
+.arrowNext {
+    right: 0.75rem;
+}
+
+/* ── Dots ────────────────────────────────────────── */
+.dots {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    padding: 0.75rem 0 0.25rem;
+}
+
+.dot {
+    height: var(--car-dot-size, 8px);
+    width: var(--car-dot-size, 8px);
+    border-radius: 999px;
+    background: var(--car-dot-color, var(--border-primary, #cbd5e1));
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition:
+        background 0.2s ease,
+        width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    flex-shrink: 0;
+
+    &:hover {
+        background: color-mix(in srgb, var(--car-dot-active-color, var(--intent-primary)) 60%, transparent);
+    }
+}
+
+.dotActive {
+    background: var(--car-dot-active-color, var(--intent-primary)) !important;
+    width: var(--car-dot-active-size, 24px);
+}

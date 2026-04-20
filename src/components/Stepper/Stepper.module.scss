@@ -1,0 +1,150 @@
+.stepper {
+    display: flex;
+
+    &.horizontal {
+        flex-direction: row;
+        align-items: flex-start;
+    }
+
+    &.vertical {
+        flex-direction: column;
+    }
+}
+
+.stepWrapper {
+    display: flex;
+    flex: 1;
+
+    .horizontal & {
+        flex-direction: row;
+        align-items: flex-start;
+
+        &:last-child {
+            flex: 0;
+        }
+    }
+
+    .vertical & {
+        flex-direction: column;
+        flex: 0;
+    }
+}
+
+.step {
+    display: flex;
+    gap: var(--spacing-sm, 0.75rem);
+
+    .horizontal & {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .vertical & {
+        flex-direction: row;
+        align-items: flex-start;
+    }
+
+    &.clickable {
+        cursor: pointer;
+
+        &:hover .stepIcon {
+            transform: scale(1.1);
+        }
+    }
+}
+
+.stepIndicator {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.stepIcon {
+    width: var(--stepper-icon-size);
+    height: var(--stepper-icon-size);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: var(--font-size-md, 1rem);
+    transition: var(--motion-transition, all 0.2s ease);
+    border: var(--border-width-thick, 2px) solid;
+
+    .step.incomplete & {
+        background: var(--stepper-bg);
+        border-color: var(--stepper-incomplete-color);
+        color: var(--stepper-incomplete-color);
+    }
+
+    .step.current & {
+        background: var(--stepper-current-color);
+        border-color: var(--stepper-current-color);
+        color: white;
+        box-shadow: 0 0 0 var(--focus-ring-width, 4px) color-mix(in srgb, var(--stepper-current-color) 20%, transparent);
+    }
+
+    .step.complete & {
+        background: var(--stepper-complete-color);
+        border-color: var(--stepper-complete-color);
+        color: white;
+    }
+
+    .step.error & {
+        background: var(--stepper-error-color);
+        border-color: var(--stepper-error-color);
+        color: white;
+    }
+}
+
+.stepContent {
+    .horizontal & {
+        max-width: 150px;
+    }
+
+    .vertical & {
+        padding-bottom: var(--spacing-md, 1rem);
+    }
+}
+
+.stepLabel {
+    font-size: var(--font-size-sm, 0.875rem);
+    font-weight: 500;
+    color: var(--stepper-text-color);
+    margin-bottom: var(--spacing-xs, 0.25rem);
+
+    .step.incomplete & {
+        color: var(--stepper-description-color);
+    }
+}
+
+.stepDescription {
+    font-size: var(--font-size-xs, 0.75rem);
+    color: var(--stepper-description-color);
+    line-height: 1.4;
+}
+
+.connector {
+    background: var(--stepper-connector-color);
+    transition: background 0.2s ease;
+
+    .horizontal & {
+        height: var(--stepper-connector-thickness);
+        flex: 1;
+        margin-top: calc(var(--stepper-icon-size) / 2 - var(--stepper-connector-thickness) / 2);
+    }
+
+    .vertical & {
+        width: var(--stepper-connector-thickness);
+        min-height: 24px;
+        margin-left: calc(var(--stepper-icon-size) / 2 - var(--stepper-connector-thickness) / 2);
+    }
+
+    &.complete {
+        background: var(--stepper-complete-color);
+    }
+
+    &.error {
+        background: var(--stepper-error-color);
+    }
+}

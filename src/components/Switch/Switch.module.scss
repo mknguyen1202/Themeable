@@ -1,0 +1,66 @@
+.switchWrapper {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm, 0.75rem);
+    cursor: pointer;
+    position: relative;
+}
+
+.switch {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+
+    &:checked ~ .slider {
+        background: var(--switch-checked-bg);
+
+        .thumb {
+            transform: translateX(calc(var(--switch-width) - var(--switch-thumb-size) - 4px));
+        }
+    }
+
+    &:focus-visible ~ .slider {
+        box-shadow: 0 0 0 var(--focus-ring-width, 3px)
+            color-mix(in srgb, var(--focus-ring-color, var(--intent-primary, #667eea)) 35%, transparent);
+    }
+
+    &:disabled ~ .slider {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    &:disabled ~ .label {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+}
+
+.slider {
+    position: relative;
+    width: var(--switch-width);
+    height: var(--switch-height);
+    border-radius: var(--switch-radius);
+    background: var(--switch-bg);
+    transition: var(--motion-transition, all 0.3s ease);
+    flex-shrink: 0;
+}
+
+.thumb {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: var(--switch-thumb-size);
+    height: var(--switch-thumb-size);
+    border-radius: 50%;
+    background: var(--switch-thumb-color);
+    transition: transform var(--motion-transition, 0.3s ease);
+    box-shadow: var(--shadow-sm, 0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.label {
+    font-size: var(--font-size-md, 1rem);
+    color: var(--switch-text-color);
+    user-select: none;
+}

@@ -1,0 +1,70 @@
+.radioWrapper {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm, 0.5rem);
+    cursor: pointer;
+    position: relative;
+}
+
+.radio {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+
+    &:checked ~ .radiomark {
+        background: var(--radio-checked-bg);
+        border-color: var(--radio-checked-border-color);
+
+        .dot {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    &:focus-visible ~ .radiomark {
+        box-shadow: 0 0 0 var(--focus-ring-width, 3px)
+            color-mix(in srgb, var(--focus-ring-color, var(--intent-primary, #667eea)) 35%, transparent);
+    }
+
+    &:disabled ~ .radiomark {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    &:disabled ~ .label {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+}
+
+.radiomark {
+    position: relative;
+    width: var(--radio-size);
+    height: var(--radio-size);
+    border: var(--radio-border-width) var(--border-style, solid) var(--radio-border-color);
+    border-radius: 50%;
+    background: var(--radio-bg);
+    transition: var(--motion-transition, all 0.2s ease);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dot {
+    width: var(--radio-dot-size);
+    height: var(--radio-dot-size);
+    border-radius: 50%;
+    background: white;
+    opacity: 0;
+    transform: scale(0);
+    transition: var(--motion-transition, all 0.2s ease);
+}
+
+.label {
+    font-size: var(--font-size-md, 1rem);
+    color: var(--radio-text-color);
+    user-select: none;
+}

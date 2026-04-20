@@ -1,0 +1,15 @@
+export const badgeTokens = {
+    primaryColor: 'var(--intent-primary)',
+    successColor: 'var(--intent-success)',
+    warningColor: 'var(--intent-warning)',
+    dangerColor: 'var(--intent-danger)',
+    infoColor: 'var(--intent-info)',
+    neutralColor: 'var(--text-secondary)',
+    borderRadius: 'var(--radius-full)',
+    fontSizeSmall: 'var(--font-size-xs)',
+    fontSizeMedium: 'var(--font-size-sm)',
+    fontSizeLarge: 'var(--font-size-md)',
+    paddingSmall: '0.125rem 0.5rem',
+    paddingMedium: '0.25rem 0.625rem',
+    paddingLarge: '0.375rem 0.75rem',
+} as const;

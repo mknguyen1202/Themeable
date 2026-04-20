@@ -1,0 +1,133 @@
+.drawerOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--drawer-overlay-color);
+    z-index: 1000;
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.drawer {
+    position: fixed;
+    background: var(--drawer-bg);
+    box-shadow: var(--shadow-lg, 0 8px 32px rgba(0, 0, 0, 0.3));
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease;
+
+    &.left {
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: var(--drawer-size);
+        animation: slideInLeft 0.3s ease;
+    }
+
+    &.right {
+        top: 0;
+        right: 0;
+        height: 100%;
+        width: var(--drawer-size);
+        animation: slideInRight 0.3s ease;
+    }
+
+    &.top {
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: var(--drawer-size);
+        animation: slideInTop 0.3s ease;
+    }
+
+    &.bottom {
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: var(--drawer-size);
+        animation: slideInBottom 0.3s ease;
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInTop {
+    from {
+        transform: translateY(-100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInBottom {
+    from {
+        transform: translateY(100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+.drawerHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-lg, 1.5rem);
+    border-bottom: 1px solid var(--drawer-border-color);
+}
+
+.drawerTitle {
+    margin: 0;
+    font-size: var(--font-size-xl, 1.25rem);
+    font-weight: 600;
+    color: var(--drawer-title-color);
+}
+
+.closeButton {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 0.25rem;
+    line-height: 1;
+    transition: color 0.2s ease;
+    margin-left: auto;
+
+    &:hover {
+        color: var(--text-primary);
+    }
+}
+
+.drawerContent {
+    padding: var(--spacing-lg, 1.5rem);
+    overflow-y: auto;
+    flex: 1;
+}

@@ -1,0 +1,96 @@
+.trigger {
+    display: inline-block;
+    cursor: pointer;
+}
+
+.popover {
+    position: fixed;
+    background: var(--popover-bg);
+    border: var(--border-width, 1px) var(--border-style, solid) var(--popover-border-color);
+    border-radius: var(--popover-radius);
+    box-shadow: var(--shadow-md, 0 4px 16px rgba(0, 0, 0, 0.1));
+    z-index: 2000;
+    animation: popoverIn 0.2s ease;
+}
+
+@keyframes popoverIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.popoverContent {
+    padding: var(--spacing-md, 1rem);
+}
+
+.arrow {
+    position: absolute;
+    width: var(--popover-arrow-size);
+    height: var(--popover-arrow-size);
+    background: var(--popover-bg);
+    border: var(--border-width, 1px) var(--border-style, solid) var(--popover-border-color);
+    transform: rotate(45deg);
+}
+
+.popover.top .arrow {
+    bottom: calc(var(--popover-arrow-size) / -2);
+    left: 50%;
+    margin-left: calc(var(--popover-arrow-size) / -2);
+    border-top: none;
+    border-left: none;
+}
+
+.popover.bottom .arrow {
+    top: calc(var(--popover-arrow-size) / -2);
+    left: 50%;
+    margin-left: calc(var(--popover-arrow-size) / -2);
+    border-bottom: none;
+    border-right: none;
+}
+
+.popover.left .arrow {
+    right: calc(var(--popover-arrow-size) / -2);
+    top: 50%;
+    margin-top: calc(var(--popover-arrow-size) / -2);
+    border-left: none;
+    border-bottom: none;
+}
+
+.popover.right .arrow {
+    left: calc(var(--popover-arrow-size) / -2);
+    top: 50%;
+    margin-top: calc(var(--popover-arrow-size) / -2);
+    border-right: none;
+    border-top: none;
+}
+
+.popover.start.top .arrow,
+.popover.start.bottom .arrow {
+    left: var(--spacing-md, 1rem);
+    margin-left: 0;
+}
+
+.popover.end.top .arrow,
+.popover.end.bottom .arrow {
+    left: auto;
+    right: var(--spacing-md, 1rem);
+    margin-left: 0;
+}
+
+.popover.start.left .arrow,
+.popover.start.right .arrow {
+    top: var(--spacing-md, 1rem);
+    margin-top: 0;
+}
+
+.popover.end.left .arrow,
+.popover.end.right .arrow {
+    top: auto;
+    bottom: var(--spacing-md, 1rem);
+    margin-top: 0;
+}

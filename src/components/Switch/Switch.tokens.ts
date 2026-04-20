@@ -1,0 +1,16 @@
+export const switchTokens = {
+    widthSmall: '32px',
+    heightSmall: '18px',
+    thumbSizeSmall: '14px',
+    widthMedium: '44px',
+    heightMedium: '24px',
+    thumbSizeMedium: '20px',
+    widthLarge: '56px',
+    heightLarge: '30px',
+    thumbSizeLarge: '26px',
+    borderRadius: '999px',
+    backgroundColor: 'var(--border-primary)',
+    checkedBackgroundColor: 'var(--intent-primary)',
+    thumbColor: '#ffffff',
+    textColor: 'var(--text-primary)',
+} as const;

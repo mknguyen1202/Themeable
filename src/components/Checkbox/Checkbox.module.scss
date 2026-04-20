@@ -1,0 +1,85 @@
+.checkboxWrapper {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm, 0.5rem);
+    cursor: pointer;
+    position: relative;
+}
+
+.checkbox {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+
+    &:checked ~ .checkmark {
+        background: var(--checkbox-checked-bg);
+        border-color: var(--checkbox-checked-border-color);
+
+        .icon {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    &:indeterminate ~ .checkmark {
+        background: var(--checkbox-checked-bg);
+        border-color: var(--checkbox-checked-border-color);
+
+        &::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 60%;
+            height: 2px;
+            background: white;
+        }
+    }
+
+    &:focus-visible ~ .checkmark {
+        box-shadow: 0 0 0 var(--focus-ring-width, 3px)
+            color-mix(in srgb, var(--focus-ring-color, var(--intent-primary, #667eea)) 35%, transparent);
+    }
+
+    &:disabled ~ .checkmark {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    &:disabled ~ .label {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+}
+
+.checkmark {
+    position: relative;
+    width: var(--checkbox-size);
+    height: var(--checkbox-size);
+    border: var(--checkbox-border-width) var(--border-style, solid) var(--checkbox-border-color);
+    border-radius: var(--checkbox-radius);
+    background: var(--checkbox-bg);
+    transition: var(--motion-transition, all 0.2s ease);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon {
+    width: 100%;
+    height: 100%;
+    color: white;
+    opacity: 0;
+    transform: scale(0.5);
+    transition: var(--motion-transition, all 0.2s ease);
+}
+
+.label {
+    font-size: var(--font-size-md, 1rem);
+    color: var(--checkbox-text-color);
+    user-select: none;
+}

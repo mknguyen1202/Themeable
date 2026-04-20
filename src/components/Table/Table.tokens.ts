@@ -1,0 +1,15 @@
+export const tableTokens = {
+    backgroundColor: 'var(--surface-base)',
+    borderColor: 'var(--border-primary)',
+    headerBackgroundColor: 'var(--surface-sunken)',
+    headerTextColor: 'var(--text-primary)',
+    cellTextColor: 'var(--text-primary)',
+    stripeBackgroundColor: 'var(--surface-sunken)',
+    hoverBackgroundColor: 'var(--surface-sunken)',
+    selectedBackgroundColor: 'var(--intent-primary)',
+    selectedTextColor: '#ffffff',
+    paddingSmall: 'var(--spacing-xs) var(--spacing-sm)',
+    paddingMedium: 'var(--spacing-sm) var(--spacing-md)',
+    paddingLarge: 'var(--spacing-md) var(--spacing-lg)',
+    borderRadius: 'var(--radius-md)',
+} as const;

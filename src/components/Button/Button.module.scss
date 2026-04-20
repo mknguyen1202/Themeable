@@ -1,0 +1,105 @@
+.buttonRoot {
+    /* Layout / geometry */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    /* sizing / spacing */
+    min-height: var(--btn-min-height);
+    padding: var(--btn-padding-y) var(--btn-padding-x);
+    gap: var(--btn-gap);
+
+    border-radius: var(--btn-radius);
+
+    /* border */
+    border-style: solid;
+    border-width: var(--btn-border-width);
+    border-color: var(--btn-border-color);
+
+    /* color & surface */
+    color: var(--btn-fg);
+    background-color: var(--btn-bg);
+
+    /* elevation / feedback */
+    box-shadow: var(--btn-shadow);
+    transform: var(--btn-transform);
+    opacity: var(--btn-opacity);
+
+    /* text */
+    font-size: var(--btn-font-size);
+    font-weight: var(--btn-font-weight);
+    line-height: 1.2;
+    font-family: inherit;
+    text-decoration: none;
+
+    /* interaction basics */
+    cursor: pointer;
+    user-select: none;
+    appearance: none;
+    position: relative; /* anchor overlay + focus ring */
+    outline: none;
+    border-radius: var(--btn-radius);
+
+    transition:
+        box-shadow 160ms var(--ease-std, ease),
+        transform 160ms var(--ease-std, ease),
+        background-color 120ms var(--ease-std, ease),
+        color 120ms var(--ease-std, ease),
+        opacity 120ms var(--ease-std, ease);
+
+    /* overlay layer for hover/pressed tint */
+    &::after {
+        content: "";
+        position: absolute;
+        pointer-events: none;
+        inset: 0;
+        border-radius: inherit;
+        background-color: var(--btn-overlay-color, transparent);
+    }
+
+    &:disabled,
+    &[data-disabled="true"] {
+        cursor: not-allowed;
+    }
+
+    &:focus-visible {
+        /* custom focus ring */
+        box-shadow:
+            0 0 0 var(--btn-focus-ring-width) var(--btn-focus-ring-color),
+            0 0 0 calc(var(--btn-focus-ring-width) + var(--btn-focus-ring-offset)) rgba(0, 0, 0, 0);
+    }
+}
+
+/* Optional slots for icon/text if you want structured children later */
+.iconSlot {
+    display: inline-flex;
+    line-height: 0;
+}
+
+.labelSlot {
+    display: inline-flex;
+    align-items: center;
+}
+
+/* ── Variant shape overrides ──────────────────────────────────────────── */
+
+/* Icon button: square/circle, equal padding on all sides */
+.buttonRoot[data-variant="icon"] {
+    padding: var(--btn-padding-y);
+    width: var(--btn-min-height);
+    min-width: var(--btn-min-height);
+}
+
+/* FAB: circle, larger footprint */
+.buttonRoot[data-variant="fab"] {
+    padding: calc(var(--btn-padding-y) * 1.5);
+    width: calc(var(--btn-min-height) * 1.5);
+    min-width: calc(var(--btn-min-height) * 1.5);
+    height: calc(var(--btn-min-height) * 1.5);
+}
+
+/* FAB Extended: pill with generous horizontal padding */
+.buttonRoot[data-variant="fabExtended"] {
+    padding: calc(var(--btn-padding-y) * 1.25) calc(var(--btn-padding-x) * 1.5);
+    gap: calc(var(--btn-gap) * 1.25);
+}

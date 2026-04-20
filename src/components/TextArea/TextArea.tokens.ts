@@ -1,0 +1,17 @@
+export const textAreaTokens = {
+    borderRadius: 'var(--radius-md)',
+    borderWidth: 'var(--border-width, 1px)',
+    borderColor: 'var(--border-primary)',
+    backgroundColor: 'var(--surface-base)',
+    textColor: 'var(--text-primary)',
+    placeholderColor: 'var(--text-tertiary)',
+    focusBorderColor: 'var(--intent-info)',
+    errorBorderColor: 'var(--intent-danger)',
+    paddingSmall: 'var(--spacing-xs) var(--spacing-sm)',
+    paddingMedium: 'var(--spacing-sm) var(--spacing-md)',
+    paddingLarge: 'var(--spacing-md) var(--spacing-lg)',
+    fontSizeSmall: 'var(--font-size-sm)',
+    fontSizeMedium: 'var(--font-size-md)',
+    fontSizeLarge: 'var(--font-size-lg)',
+    minHeight: '80px',
+} as const;

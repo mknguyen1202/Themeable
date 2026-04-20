@@ -1,0 +1,268 @@
+/* ── Wrapper ─────────────────────────────────────── */
+.wrapper {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    position: relative;
+    width: 100%;
+    max-width: 280px;
+}
+
+.label {
+    font-size: var(--font-size-sm, 0.875rem);
+    font-weight: 500;
+    color: var(--dp-label-color, var(--text-secondary));
+}
+
+/* ── Trigger input ───────────────────────────────── */
+.trigger {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--dp-input-bg, var(--surface-base, #fff));
+    border: var(--border-width, 1.5px) var(--border-style, solid) var(--dp-border-color, var(--border-primary, #cbd5e1));
+    border-radius: var(--dp-radius, var(--radius-md, 6px));
+    padding: 0.5rem 0.75rem;
+    cursor: pointer;
+    font-size: var(--font-size-sm, 0.875rem);
+    color: var(--dp-text-color, var(--text-primary));
+    transition: var(--motion-transition, border-color 0.15s ease, box-shadow 0.15s ease);
+    width: 100%;
+    text-align: left;
+
+    &:hover:not(:disabled) {
+        border-color: var(--dp-focus-border, var(--intent-primary));
+    }
+
+    &:focus-visible {
+        outline: none;
+        border-color: var(--dp-focus-border, var(--intent-primary));
+        box-shadow: 0 0 0 var(--focus-ring-width, 3px)
+            color-mix(in srgb, var(--dp-focus-border, var(--intent-primary)) 20%, transparent);
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+}
+
+.triggerText {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.placeholder {
+    color: var(--dp-placeholder, var(--text-muted));
+}
+
+.calIcon {
+    flex-shrink: 0;
+    color: var(--dp-label-color, var(--text-muted));
+    display: flex;
+    align-items: center;
+
+    svg {
+        display: block;
+    }
+}
+
+.clearBtn {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    color: var(--dp-placeholder, var(--text-muted));
+    display: flex;
+    align-items: center;
+    border-radius: 50%;
+    flex-shrink: 0;
+    transition: color 0.15s ease;
+
+    &:hover {
+        color: var(--dp-text-color, var(--text-primary));
+    }
+    svg {
+        display: block;
+    }
+}
+
+.error .trigger {
+    border-color: var(--dp-error-color, var(--intent-danger));
+}
+
+.helperText {
+    font-size: var(--font-size-xs, 0.75rem);
+    color: var(--dp-helper-color, var(--text-muted));
+}
+
+.errorText {
+    font-size: var(--font-size-xs, 0.75rem);
+    color: var(--dp-error-color, var(--intent-danger));
+}
+
+/* ── Calendar popup ──────────────────────────────── */
+.calendarPopup {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    z-index: 300;
+    background: var(--dp-cal-bg, var(--surface-family-raised, var(--surface-raised, #fff)));
+    border: var(--border-width, 1.5px) var(--border-style, solid) var(--dp-cal-border, var(--border-primary, #cbd5e1));
+    border-radius: var(--dp-cal-radius, var(--radius-lg, 8px));
+    box-shadow: var(--shadow-md, 0 8px 24px rgba(0, 0, 0, 0.12));
+    overflow: hidden;
+    animation: popIn 0.15s ease;
+    min-width: 260px;
+}
+
+@keyframes popIn {
+    from {
+        opacity: 0;
+        transform: translateY(-4px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* ── Calendar header (month/year nav) ────────────── */
+.calHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem 0.5rem;
+}
+
+.monthYear {
+    font-weight: 600;
+    font-size: var(--font-size-sm, 0.875rem);
+    color: var(--dp-cal-header-color, var(--text-primary));
+}
+
+.navBtn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--dp-label-color, var(--text-secondary));
+    padding: 0.25rem;
+    border-radius: var(--radius-sm, 4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition:
+        background 0.15s ease,
+        color 0.15s ease;
+
+    &:hover {
+        background: var(--dp-day-hover-bg, var(--surface-sunken, #f1f5f9));
+        color: var(--dp-text-color, var(--text-primary));
+    }
+
+    svg {
+        display: block;
+    }
+}
+
+/* ── Weekday labels ──────────────────────────────── */
+.weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    padding: 0 0.75rem;
+}
+
+.weekday {
+    text-align: center;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--dp-day-muted, var(--text-muted));
+    padding: 0.25rem 0;
+    letter-spacing: 0.04em;
+}
+
+/* ── Day grid ────────────────────────────────────── */
+.days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+    padding: 0.25rem 0.75rem 0.75rem;
+}
+
+.day {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-size-sm, 0.875rem);
+    border-radius: var(--radius-sm, 4px);
+    border: none;
+    background: none;
+    color: var(--dp-day-color, var(--text-primary));
+    cursor: pointer;
+    transition:
+        background 0.12s ease,
+        color 0.12s ease;
+    padding: 0;
+
+    &:hover:not(:disabled) {
+        background: var(--dp-day-hover-bg, var(--surface-sunken, #f1f5f9));
+    }
+}
+
+.dayOtherMonth {
+    color: var(--dp-day-muted, var(--text-muted));
+    opacity: 0.45;
+}
+
+.dayToday {
+    border: 1.5px solid var(--dp-today-border, var(--intent-primary));
+    font-weight: 600;
+}
+
+.daySelected {
+    background: var(--dp-selected-bg, var(--intent-primary)) !important;
+    color: var(--dp-selected-color, #fff) !important;
+    font-weight: 600;
+    border-color: transparent !important;
+}
+
+.dayDisabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* ── Footer ──────────────────────────────────────── */
+.footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border-top: 1px solid var(--dp-cal-border, var(--border-primary, #cbd5e1));
+}
+
+.todayBtn,
+.clearCalBtn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: var(--font-size-sm, 0.875rem);
+    color: var(--dp-focus-border, var(--intent-primary));
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-sm, 4px);
+    font-weight: 500;
+    transition: background 0.12s ease;
+
+    &:hover {
+        background: var(--dp-day-hover-bg, var(--surface-sunken, #f1f5f9));
+    }
+}
+
+.clearCalBtn {
+    color: var(--dp-day-muted, var(--text-muted));
+}
