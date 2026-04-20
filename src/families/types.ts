@@ -37,10 +37,10 @@ export type DesignFamily = {
         }) => string | undefined
     };
     elevation: Record<Elevation, {
-        shadow: (elevationColor: string, a: { mode: Mode }) => string;
-        innerShadow?: (elevationColor: string, a: { mode: Mode }) => string;
-        backdrop?: (elevationColor: string, a: { mode: Mode }) => string;
-        surfaceTint?: (elevationColor: string, a: { mode: Mode }) => string
+        shadow: (elevationColor: string, a: { mode: Mode; primaryColor?: string; surfaceBase?: string }) => string;
+        innerShadow?: (elevationColor: string, a: { mode: Mode; primaryColor?: string; surfaceBase?: string }) => string;
+        backdrop?: (elevationColor: string, a: { mode: Mode; primaryColor?: string; surfaceBase?: string }) => string;
+        surfaceTint?: (elevationColor: string, a: { mode: Mode; primaryColor?: string; surfaceBase?: string }) => string
     }>;
     transparency?: {
         blur?: (level: Elevation) => string | undefined;

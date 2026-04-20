@@ -1,7 +1,7 @@
 import type { Theme } from "../themes/types";
 import type { DesignFamily } from "../families/types";
 import type { DensityScale, StateName } from "../semantics/types";
-import type { ResolvedButtonTokens } from "./types";
+import type { ResolvedButtonTokens } from "../components/Button/Button.resolve";
 
 import { resolveSurface } from "./surface";
 import { resolveInteractionState } from "./state";
@@ -49,7 +49,6 @@ export function resolveButtonTokens(opts: {
         theme,
         family,
         elevationLevel,
-        variant,
         state,
     });
 

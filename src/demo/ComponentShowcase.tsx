@@ -463,7 +463,7 @@ export function ComponentShowcase({ componentId, onOpenEditor }: ComponentShowca
                                     <div style={{ padding: '0.75rem 1rem', minWidth: '200px' }}>
                                         <strong style={{ display: 'block', marginBottom: '0.5rem' }}>Popover title</strong>
                                         <p style={{ margin: '0 0 0.75rem', fontSize: '0.875rem' }}>This popover has richer content with multiple elements.</p>
-                                        <Button size="small">Action</Button>
+                                        <Button size="sm">Action</Button>
                                     </div>
                                 </Popover>
                             </div>
@@ -1192,7 +1192,7 @@ export function ComponentShowcase({ componentId, onOpenEditor }: ComponentShowca
                             <Button variant="outlined">Button B</Button>
                             <Button variant="text">Button C</Button>
                             <Badge color="success">New</Badge>
-                            <Spinner size="sm" />
+                            <Spinner size="small" />
                         </Stack>
 
                         <p style={{ margin: '1.5rem 0 0.5rem', fontWeight: 600, color: 'var(--text-primary)' }}>Row with wrap</p>

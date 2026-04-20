@@ -1,4 +1,34 @@
 import type { StateName } from "../semantics/types";
+import type { Theme } from "../themes/types";
+import type { DesignFamily } from "../families/types";
+
+export type ResolutionContext = {
+    theme: Theme;
+    family: DesignFamily;
+};
+
+export type ButtonTokens = {
+    radii: number;
+    paddings: { x: number; y: number };
+    variants: Record<string, { bg: string; fg: string; border?: string; shadow?: string; radius?: number }>;
+    states: {
+        hover: Record<string, { opacity: number; shadow?: string | undefined }>;
+        pressed: Record<string, { opacity: number; shadow?: string | undefined }>;
+        focus: { ring: string };
+        disabled: { opacity: number };
+    };
+};
+
+export type ResolvedTokens = {
+    cssVars: Record<string, string>;
+    components: { Button: ButtonTokens };
+    meta: {
+        themeId: string;
+        familyId: string;
+        mode: string;
+        densityScale: number;
+    };
+};
 
 /**
  * Base surface information at a given elevation level as interpreted by the design family.

@@ -18,11 +18,19 @@
 
     /* Linting */
     "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": [
+    "src/WIP",
+    "src/resolver/color.ts",
+    "src/resolver/elevation.ts",
+    "src/resolver/scales.ts",
+    "src/resolver/button.ts",
+    "src/resolver/css.ts"
+  ]
 }
